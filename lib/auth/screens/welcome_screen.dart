@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_care/auth/screens/login_screen.dart';
-import 'package:plant_care/auth/screens/register_screen.dart';
+import 'package:plant_care/screens/screens.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
