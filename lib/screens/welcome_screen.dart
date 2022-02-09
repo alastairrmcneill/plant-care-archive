@@ -51,6 +51,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ],
             ),
           ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SafeArea(
+              child: Text(
+                'Created by Alastair McNeill',
+                style: TextStyle(
+                  color: const Color(0xFF3a4d34).withOpacity(0.5),
+                  fontFamily: 'HelveticaNeue',
+                  fontWeight: FontWeight.w100,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

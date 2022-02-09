@@ -17,15 +17,18 @@ class TextInputWidget extends StatefulWidget {
 }
 
 class _TextInputWidgetState extends State<TextInputWidget> {
-  bool isValid = false;
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      obscureText: widget.obscureText,
-      decoration: InputDecoration(
-        prefixIcon: Icon(widget.prefixIcon),
-        labelText: widget.labelText,
-        suffixIcon: isValid ? Icon(Icons.check) : null,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        obscureText: widget.obscureText,
+        decoration: InputDecoration(
+          prefixIcon: Icon(widget.prefixIcon),
+          labelText: widget.labelText,
+          suffixIcon: Icon(Icons.visibility_off_rounded),
+          fillColor: Color(0xFF3a4d34).withOpacity(0.05),
+        ),
       ),
     );
   }
