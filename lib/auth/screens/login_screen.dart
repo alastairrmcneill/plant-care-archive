@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/auth/models/user_model.dart';
 import 'package:plant_care/screens/screens.dart';
 import 'package:plant_care/auth/widgets/text_field_widget.dart';
+import 'package:plant_care/auth/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,10 +16,15 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String errorText = '';
 
-  void logInFunc(String value) {
-    setState(() {
-      errorText = 'Oh my god there is an error! What are we going to do!?!?';
-    });
+  void logInFunc(String value) async {
+    dynamic result = await AuthService.signInWithEmailPassword('test@me.com', '123456');
+    if (result is AppUser) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+    } else if (result is FirebaseAuthException) {
+      setState(() {
+        errorText = result.message!;
+      });
+    }
   }
 
   @override
@@ -67,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         logInFunc('');
                       },
                       child: const Text('Login'),
