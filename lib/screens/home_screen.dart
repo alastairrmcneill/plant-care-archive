@@ -17,9 +17,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ElevatedButton(
           onPressed: () async {
             dynamic result = await AuthService.signOut();
-            if (result == null) {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WelcomeScreen()));
-            }
           },
           child: Text('Sign Out'),
         ),

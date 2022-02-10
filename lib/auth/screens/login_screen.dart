@@ -18,9 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void logInFunc(String value) async {
     dynamic result = await AuthService.signInWithEmailPassword('test@me.com', '123456');
-    if (result is AppUser) {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
-    } else if (result is FirebaseAuthException) {
+    if (result is FirebaseAuthException) {
       setState(() {
         errorText = result.message!;
       });

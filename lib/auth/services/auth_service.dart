@@ -9,6 +9,11 @@ class AuthService {
     return (user != null) ? AppUser(id: user.uid) : null;
   }
 
+  // Auth user stream
+  Stream<AppUser?> get appUserStream {
+    return _auth.authStateChanges().map((User? user) => _appUserFromFirebaseUser(user));
+  }
+
   // Sign In
   static Future signInWithEmailPassword(String email, String password) async {
     try {
