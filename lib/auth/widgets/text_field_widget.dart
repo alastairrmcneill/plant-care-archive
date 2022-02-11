@@ -7,6 +7,7 @@ class TextInputWidget extends StatefulWidget {
   final TextInputAction textInputAction;
   final TextInputType keyboardType;
   final Function(String)? submittedFunc;
+  final Function(String)? onChanged;
 
   const TextInputWidget({
     Key? key,
@@ -16,6 +17,7 @@ class TextInputWidget extends StatefulWidget {
     required this.textInputAction,
     required this.keyboardType,
     this.submittedFunc,
+    this.onChanged,
   });
 
   @override
@@ -42,6 +44,11 @@ class _TextInputWidgetState extends State<TextInputWidget> {
         onFieldSubmitted: (value) {
           if (widget.isPassword) {
             widget.submittedFunc!(value);
+          }
+        },
+        onChanged: (value) {
+          if (widget.onChanged != null) {
+            widget.onChanged!(value);
           }
         },
         obscureText: obscureText,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:plant_care/auth/services/validation_service.dart';
 import 'package:plant_care/auth/widgets/text_field_widget.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -10,8 +12,11 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   String errorText = '';
+
   @override
   Widget build(BuildContext context) {
+    final validState = Provider.of<Vaildator>(context, listen: true);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -64,21 +69,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       fontSize: 16,
                     ),
                   ),
-                  const TextInputWidget(
+                  TextInputWidget(
                     labelText: 'Email',
                     prefixIcon: Icons.mail_outline,
                     isPassword: false,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
+                    onChanged: validState.validateEmail,
                   ),
                   const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {
-                        print('Forgot Password');
-                      },
+                      onPressed: validState.emailStatus
+                          ? () {
+                              print('Forgot Password');
+                            }
+                          : null,
+                      // Reset provider when clicking off this page
                       child: const Text('Forgot password'),
                     ),
                   ),

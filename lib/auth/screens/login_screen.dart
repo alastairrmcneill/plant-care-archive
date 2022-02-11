@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/auth/models/user_model.dart';
+import 'package:plant_care/auth/services/validation_service.dart';
 import 'package:plant_care/screens/screens.dart';
 import 'package:plant_care/auth/widgets/text_field_widget.dart';
 import 'package:plant_care/auth/services/auth_service.dart';
 import 'package:plant_care/support/wrapper.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -28,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final formState = Provider.of<Vaildator>(context, listen: true);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -70,12 +74,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         )
                       : const SizedBox(height: 1),
-                  const TextInputWidget(
+                  TextInputWidget(
                     labelText: 'Email',
                     prefixIcon: Icons.mail_outline,
                     isPassword: false,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
+                    onChanged: formState.validateEmail,
                   ),
                   TextInputWidget(
                     labelText: 'Password',
@@ -84,16 +89,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.visiblePassword,
                     submittedFunc: logInFunc,
+                    onChanged: formState.validatePassword,
                   ),
                   const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () async {
-                        await logInFunc(''); //.then((value) => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false));
-                        //Need to check if it is a valid user or not before punting back.
-                      },
+                      onPressed: formState.formStatus
+                          ? () async {
+                              await logInFunc(''); //.then((value) => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false));
+                              //Need to check if it is a valid user or not before punting back.
+                            }
+                          : null,
                       child: const Text('Login'),
                     ),
                   ),
