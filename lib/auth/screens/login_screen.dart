@@ -5,6 +5,7 @@ import 'package:plant_care/auth/models/user_model.dart';
 import 'package:plant_care/screens/screens.dart';
 import 'package:plant_care/auth/widgets/text_field_widget.dart';
 import 'package:plant_care/auth/services/auth_service.dart';
+import 'package:plant_care/support/wrapper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,8 +17,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String errorText = '';
 
-  void logInFunc(String value) async {
-    dynamic result = await AuthService.signInWithEmailPassword('test@me.com', '123456');
+  Future<void> logInFunc(String value) async {
+    dynamic result = await AuthService.signInWithEmailPassword('test@me.cm', '123456');
     if (result is FirebaseAuthException) {
       setState(() {
         errorText = result.message!;
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
         iconTheme: const IconThemeData(color: Color(0xFF3a4d34)),
       ),
       extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           //Background image
@@ -47,12 +48,28 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          Center(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const SizedBox(height: 180),
+                  errorText != ''
+                      ? Padding(
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                            right: 10,
+                            top: 5,
+                          ),
+                          child: Text(
+                            errorText,
+                            style: TextStyle(
+                              color: Colors.red[700],
+                              fontSize: 12,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(height: 1),
                   const TextInputWidget(
                     labelText: 'Email',
                     prefixIcon: Icons.mail_outline,
@@ -74,31 +91,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () async {
-                        logInFunc('');
+                        await logInFunc(''); //.then((value) => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false));
+                        //Need to check if it is a valid user or not before punting back.
                       },
                       child: const Text('Login'),
                     ),
                   ),
-                  errorText != ''
-                      ? Padding(
-                          padding: const EdgeInsets.only(
-                            left: 10,
-                            right: 10,
-                            top: 5,
-                          ),
-                          child: Text(
-                            errorText,
-                            style: TextStyle(
-                              color: Colors.red[700],
-                              fontSize: 12,
-                            ),
-                          ),
-                        )
-                      : const SizedBox(height: 1),
                   TextButton(
                     onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgotPasswordScreen())),
                     child: Text('Forgot Password?'),
                   ),
+                  const SizedBox(height: 260),
                 ],
               ),
             ),

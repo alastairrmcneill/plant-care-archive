@@ -26,8 +26,25 @@ class AuthService {
   }
 
   // Register
+  static Future registerWithEmailPassword(String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      User? user = result.user;
+      return _appUserFromFirebaseUser(user);
+    } on FirebaseAuthException catch (error) {
+      return error;
+    }
+  }
 
   // Forgot password
+  static Future forgotPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return null;
+    } on FirebaseAuthException catch (error) {
+      return error;
+    }
+  }
 
   // Sign Out
   static Future signOut() async {
