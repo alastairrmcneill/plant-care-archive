@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TextInputWidget extends StatefulWidget {
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
   final String labelText;
   final IconData prefixIcon;
   final bool isPassword;
@@ -11,6 +13,8 @@ class TextInputWidget extends StatefulWidget {
 
   const TextInputWidget({
     Key? key,
+    this.controller,
+    this.focusNode,
     required this.labelText,
     required this.prefixIcon,
     required this.isPassword,
@@ -38,6 +42,7 @@ class _TextInputWidgetState extends State<TextInputWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
+        controller: widget.controller,
         autocorrect: false,
         textInputAction: widget.textInputAction,
         keyboardType: widget.keyboardType,

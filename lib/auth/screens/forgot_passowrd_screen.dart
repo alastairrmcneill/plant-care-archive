@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/auth/services/auth_service.dart';
 import 'package:plant_care/auth/services/validation_service.dart';
 import 'package:plant_care/auth/widgets/text_field_widget.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,18 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   String errorText = '';
+  TextEditingController _emailController = TextEditingController();
+
+  Future<void> logInFunc(String value) async {
+    dynamic result = await AuthService.forgotPassword(
+      _emailController.text.trim(),
+    );
+    if (result is FirebaseAuthException) {
+      setState(() {
+        errorText = result.message!;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +36,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         elevation: 0,
         backgroundColor: Colors.white.withOpacity(0),
         iconTheme: const IconThemeData(color: Color(0xFF3a4d34)),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            validState.reset();
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
       ),
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -70,6 +91,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                   ),
                   TextInputWidget(
+                    controller: _emailController,
                     labelText: 'Email',
                     prefixIcon: Icons.mail_outline,
                     isPassword: false,
