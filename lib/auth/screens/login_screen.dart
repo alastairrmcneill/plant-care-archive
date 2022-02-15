@@ -43,15 +43,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final formState = Provider.of<Vaildator>(context, listen: true);
+    final loginState = Provider.of<Vaildator>(context, listen: true);
 
     void _resetPage() {
-      formState.reset();
+      loginState.reset();
       _emailController.clear();
       _passwordController.clear();
       // understand how to remove focus completely
       _emailFocus.unfocus();
       _passwordFocus.unfocus();
+      FocusScope.of(context).unfocus();
       setState(() {});
     }
 
@@ -83,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -112,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     isPassword: false,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
-                    onChanged: formState.validateEmail,
+                    onChanged: loginState.validateEmail,
                   ),
                   TextInputWidget(
                     controller: _passwordController,
@@ -123,14 +124,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.visiblePassword,
                     submittedFunc: login,
-                    onChanged: formState.validatePassword,
+                    onChanged: loginState.validatePassword,
                   ),
                   const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: formState.formStatus
+                      onPressed: loginState.loginStatus
                           ? () async {
                               await login(''); //.then((value) => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false));
                               //Need to check if it is a valid user or not before punting back.

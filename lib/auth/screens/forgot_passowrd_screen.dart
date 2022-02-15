@@ -29,7 +29,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final validState = Provider.of<Vaildator>(context, listen: true);
+    final forgotPasswordState = Provider.of<Vaildator>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +39,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
-            validState.reset();
+            forgotPasswordState.reset();
           },
           icon: Icon(Icons.arrow_back),
         ),
@@ -59,7 +59,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -97,14 +97,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     isPassword: false,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
-                    onChanged: validState.validateEmail,
+                    onChanged: forgotPasswordState.validateEmail,
                   ),
                   const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: validState.emailStatus
+                      onPressed: forgotPasswordState.emailStatus
                           ? () {
                               print('Forgot Password');
                             }
