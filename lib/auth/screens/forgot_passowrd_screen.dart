@@ -16,7 +16,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   String errorText = '';
   TextEditingController _emailController = TextEditingController();
 
-  Future<void> logInFunc(String value) async {
+  Future<void> forgotPassword(String email) async {
     dynamic result = await AuthService.forgotPassword(
       _emailController.text.trim(),
     );
@@ -105,8 +105,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: forgotPasswordState.emailStatus
-                          ? () {
-                              print('Forgot Password');
+                          ? () async {
+                              forgotPassword('');
                             }
                           : null,
                       // Reset provider when clicking off this page

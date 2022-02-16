@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/auth/models/user_model.dart';
+import 'package:plant_care/auth/services/auth_service.dart';
 import 'package:plant_care/auth/services/validation_service.dart';
 import 'package:plant_care/auth/widgets/text_field_widget.dart';
 import 'package:plant_care/screens/screens.dart';
+import 'package:plant_care/support/wrapper.dart';
 import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -25,7 +29,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FocusNode _passwordFocus2 = FocusNode();
 
   void _resetPage() {}
-  Future<void> _register(String value) async {}
+  Future _register(String value) async {
+    if (_passwordController1.text == _passwordController2.text) {
+      dynamic result = AuthService.registerWithEmailPassword(
+        _emailController.text.trim(),
+        _passwordController1.text.trim(),
+      );
+      if (result is FirebaseAuthException) {
+        setState(() {
+          errorText = result.message!;
+        });
+
+        return result.message!;
+      } else {
+        return result;
+      }
+    } else {
+      setState(() {
+        errorText = 'Passwords do not match.';
+      });
+      return 'Passwords do not match.';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     labelText: 'Password',
                     prefixIcon: Icons.lock_outline,
                     isPassword: true,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.visiblePassword,
                     onChanged: registerState.validatePassword,
                   ),
@@ -157,8 +182,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: ElevatedButton(
                       onPressed: registerState.registerStatus
                           ? () async {
-                              await () {}; //.then((value) => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false));
-                              //Need to check if it is a valid user or not before punting back.
+                              await _register('').then((value) {
+                                if (value is AppUser) {
+                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
+                                }
+                              });
                             }
                           : null,
                       child: const Text('Register'),

@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/auth/models/user_model.dart';
 import 'package:plant_care/auth/services/validation_service.dart';
 import 'package:plant_care/screens/screens.dart';
 import 'package:plant_care/auth/widgets/text_field_widget.dart';
 import 'package:plant_care/auth/services/auth_service.dart';
+import 'package:plant_care/support/wrapper.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
 
-  Future<void> login(String value) async {
+  Future login(String value) async {
     dynamic result = await AuthService.signInWithEmailPassword(
       _emailController.text.trim(),
       _passwordController.text.trim(),
@@ -29,6 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         errorText = result.message!;
       });
+      return result.message!;
+    } else {
+      return result;
     }
   }
 
@@ -133,8 +138,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ElevatedButton(
                       onPressed: loginState.loginStatus
                           ? () async {
-                              await login(''); //.then((value) => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false));
-                              //Need to check if it is a valid user or not before punting back.
+                              await login('').then((value) {
+                                if (value is AppUser) {
+                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
+                                }
+                              });
                             }
                           : null,
                       child: const Text('Login'),
