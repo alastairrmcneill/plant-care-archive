@@ -74,105 +74,99 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          //Background image
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/login_background.png"),
-                fit: BoxFit.cover,
-                alignment: Alignment.topLeft,
-              ),
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/login_background.png"),
+            fit: BoxFit.cover,
+            alignment: Alignment.topLeft,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  errorText != ''
-                      ? Padding(
-                          padding: const EdgeInsets.only(
-                            left: 10,
-                            right: 10,
-                            top: 5,
-                          ),
-                          child: Text(
-                            errorText,
-                            style: TextStyle(
-                              color: Colors.red[700],
-                              fontSize: 12,
-                            ),
-                          ),
-                        )
-                      : const SizedBox(height: 1),
-                  TextInputWidget(
-                    controller: _emailController,
-                    focusNode: _emailFocus,
-                    labelText: 'Email',
-                    prefixIcon: Icons.mail_outline,
-                    isPassword: false,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: loginState.validateEmail,
-                  ),
-                  TextInputWidget(
-                    controller: _passwordController,
-                    focusNode: _passwordFocus,
-                    labelText: 'Password',
-                    prefixIcon: Icons.lock_outline,
-                    isPassword: true,
-                    textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.visiblePassword,
-                    submittedFunc: (string) {
-                      login(
-                        _emailController.text,
-                        _passwordController.text,
-                      ).then((value) {
-                        if (value is AppUser) {
-                          _resetPage();
-                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
-                        }
-                      });
-                    },
-                    onChanged: loginState.validatePassword,
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: loginState.loginStatus
-                          ? () async {
-                              await login(
-                                _emailController.text,
-                                _passwordController.text,
-                              ).then((value) {
-                                if (value is AppUser) {
-                                  _resetPage();
-                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
-                                }
-                              });
-                            }
-                          : null,
-                      child: const Text('Login'),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              errorText != ''
+                  ? Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        top: 5,
+                      ),
+                      child: Text(
+                        errorText,
+                        style: TextStyle(
+                          color: Colors.red[700],
+                          fontSize: 12,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(height: 1),
+              TextInputWidget(
+                controller: _emailController,
+                focusNode: _emailFocus,
+                labelText: 'Email',
+                prefixIcon: Icons.mail_outline,
+                isPassword: false,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.emailAddress,
+                onChanged: loginState.validateEmail,
+              ),
+              TextInputWidget(
+                controller: _passwordController,
+                focusNode: _passwordFocus,
+                labelText: 'Password',
+                prefixIcon: Icons.lock_outline,
+                isPassword: true,
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.visiblePassword,
+                submittedFunc: (string) {
+                  login(
+                    _emailController.text,
+                    _passwordController.text,
+                  ).then((value) {
+                    if (value is AppUser) {
                       _resetPage();
-                    },
-                    child: Text('Forgot Password?'),
-                  ),
-                  const SizedBox(height: 260),
-                ],
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
+                    }
+                  });
+                },
+                onChanged: loginState.validatePassword,
               ),
-            ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: loginState.loginStatus
+                      ? () async {
+                          await login(
+                            _emailController.text,
+                            _passwordController.text,
+                          ).then((value) {
+                            if (value is AppUser) {
+                              _resetPage();
+                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
+                            }
+                          });
+                        }
+                      : null,
+                  child: const Text('Login'),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+                  _resetPage();
+                },
+                child: Text('Forgot Password?'),
+              ),
+              const SizedBox(height: 260),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
