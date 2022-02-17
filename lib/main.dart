@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:plant_care/auth/models/user_model.dart';
-import 'package:plant_care/auth/services/auth_service.dart';
-import 'package:plant_care/auth/services/validation_service.dart';
+import 'package:plant_care/models/user_model.dart';
+import 'package:plant_care/services/auth_service.dart';
+import 'package:plant_care/services/validation_service.dart';
 import 'package:plant_care/support/theme_data.dart';
 import 'package:plant_care/support/wrapper.dart';
 import 'package:provider/provider.dart';

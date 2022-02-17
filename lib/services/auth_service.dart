@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:plant_care/auth/models/custom_error_model.dart';
-import 'package:plant_care/auth/models/user_model.dart';
+import 'package:plant_care/models/models.dart';
 
 class AuthService {
   static FirebaseAuth _auth = FirebaseAuth.instance;

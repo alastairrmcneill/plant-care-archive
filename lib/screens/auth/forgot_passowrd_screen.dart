@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:plant_care/auth/models/custom_error_model.dart';
-import 'package:plant_care/auth/services/auth_service.dart';
-import 'package:plant_care/auth/services/validation_service.dart';
-import 'package:plant_care/auth/widgets/text_field_widget.dart';
+import 'package:plant_care/models/models.dart';
+import 'package:plant_care/services/services.dart';
+import 'package:plant_care/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {

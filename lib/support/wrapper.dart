@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_care/auth/models/user_model.dart';
+import 'package:plant_care/models/models.dart';
 import 'package:plant_care/screens/screens.dart';
 import 'package:provider/provider.dart';
 
