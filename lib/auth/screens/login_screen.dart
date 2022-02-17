@@ -22,10 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
 
-  Future login(String value) async {
+  Future login(String email, String password) async {
     dynamic result = await AuthService.signInWithEmailPassword(
-      _emailController.text.trim(),
-      _passwordController.text.trim(),
+      email.trim(),
+      password.trim(),
     );
     if (result is FirebaseAuthException) {
       setState(() {
@@ -128,7 +128,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     isPassword: true,
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.visiblePassword,
-                    submittedFunc: login,
+                    submittedFunc: (string) {
+                      login(
+                        _emailController.text,
+                        _passwordController.text,
+                      ).then((value) {
+                        if (value is AppUser) {
+                          _resetPage();
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
+                        }
+                      });
+                    },
                     onChanged: loginState.validatePassword,
                   ),
                   const SizedBox(height: 8),
@@ -138,8 +148,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ElevatedButton(
                       onPressed: loginState.loginStatus
                           ? () async {
-                              await login('').then((value) {
+                              await login(
+                                _emailController.text,
+                                _passwordController.text,
+                              ).then((value) {
                                 if (value is AppUser) {
+                                  _resetPage();
                                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
                                 }
                               });

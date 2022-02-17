@@ -16,14 +16,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   String errorText = '';
   TextEditingController _emailController = TextEditingController();
 
-  Future<void> forgotPassword(String email) async {
+  Future forgotPassword(String email) async {
     dynamic result = await AuthService.forgotPassword(
-      _emailController.text.trim(),
+      email.trim(),
     );
+    print(result);
     if (result is FirebaseAuthException) {
       setState(() {
         errorText = result.message!;
       });
+      return result.message!;
+    } else {
+      return result;
     }
   }
 
@@ -106,7 +110,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     child: ElevatedButton(
                       onPressed: forgotPasswordState.emailStatus
                           ? () async {
-                              forgotPassword('');
+                              forgotPassword(
+                                _emailController.text,
+                              ).then((value) {
+                                Navigator.of(context).pop();
+                                forgotPasswordState.reset();
+                              });
                             }
                           : null,
                       // Reset provider when clicking off this page

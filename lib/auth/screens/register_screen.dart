@@ -28,12 +28,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FocusNode _passwordFocus1 = FocusNode();
   final FocusNode _passwordFocus2 = FocusNode();
 
-  void _resetPage() {}
-  Future _register(String value) async {
-    if (_passwordController1.text == _passwordController2.text) {
+  Future _register(String email, String password1, String password2) async {
+    if (password1 == password2) {
       dynamic result = AuthService.registerWithEmailPassword(
-        _emailController.text.trim(),
-        _passwordController1.text.trim(),
+        email.trim(),
+        password1.trim(),
       );
       if (result is FirebaseAuthException) {
         setState(() {
@@ -173,7 +172,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     isPassword: true,
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.visiblePassword,
-                    submittedFunc: _register,
+                    submittedFunc: (string) {
+                      _register(
+                        _emailController.text,
+                        _passwordController1.text,
+                        _passwordController2.text,
+                      ).then((value) {
+                        if (value is AppUser) {
+                          _resetPage();
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
+                        }
+                      });
+                    },
                   ),
                   const SizedBox(height: 8),
                   SizedBox(
@@ -182,8 +192,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: ElevatedButton(
                       onPressed: registerState.registerStatus
                           ? () async {
-                              await _register('').then((value) {
+                              await _register(
+                                _emailController.text,
+                                _passwordController1.text,
+                                _passwordController2.text,
+                              ).then((value) {
                                 if (value is AppUser) {
+                                  _resetPage();
                                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
                                 }
                               });
