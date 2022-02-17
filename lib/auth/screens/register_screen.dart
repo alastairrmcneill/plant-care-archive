@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/auth/models/custom_error_model.dart';
 import 'package:plant_care/auth/models/user_model.dart';
 import 'package:plant_care/auth/services/auth_service.dart';
 import 'package:plant_care/auth/services/validation_service.dart';
@@ -30,16 +30,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future _register(String email, String password1, String password2) async {
     if (password1 == password2) {
-      dynamic result = AuthService.registerWithEmailPassword(
+      dynamic result = await AuthService.registerWithEmailPassword(
         email.trim(),
         password1.trim(),
       );
-      if (result is FirebaseAuthException) {
+      if (result is CustomError) {
         setState(() {
-          errorText = result.message!;
+          errorText = result.message;
         });
 
-        return result.message!;
+        return result.message;
       } else {
         return result;
       }

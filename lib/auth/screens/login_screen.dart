@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/auth/models/custom_error_model.dart';
 import 'package:plant_care/auth/models/user_model.dart';
 import 'package:plant_care/auth/services/validation_service.dart';
 import 'package:plant_care/screens/screens.dart';
@@ -27,11 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
       email.trim(),
       password.trim(),
     );
-    if (result is FirebaseAuthException) {
+    if (result is CustomError) {
       setState(() {
-        errorText = result.message!;
+        errorText = result.message;
       });
-      return result.message!;
+      return result.message;
     } else {
       return result;
     }

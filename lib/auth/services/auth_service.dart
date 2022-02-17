@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:plant_care/auth/models/custom_error_model.dart';
 import 'package:plant_care/auth/models/user_model.dart';
 
 class AuthService {
@@ -7,6 +8,10 @@ class AuthService {
   // AppUser from Firebase user
   static AppUser? _appUserFromFirebaseUser(User? user) {
     return (user != null) ? AppUser(id: user.uid) : null;
+  }
+
+  static CustomError _customErrorFromFirebaseAuthException(FirebaseAuthException error) {
+    return CustomError(code: error.code, message: error.message!);
   }
 
   // Auth user stream
@@ -21,7 +26,7 @@ class AuthService {
       User? user = result.user;
       return _appUserFromFirebaseUser(user);
     } on FirebaseAuthException catch (error) {
-      return error;
+      return _customErrorFromFirebaseAuthException(error);
     }
   }
 
@@ -32,7 +37,7 @@ class AuthService {
       User? user = result.user;
       return _appUserFromFirebaseUser(user);
     } on FirebaseAuthException catch (error) {
-      return error;
+      return _customErrorFromFirebaseAuthException(error);
     }
   }
 
@@ -42,7 +47,7 @@ class AuthService {
       await _auth.sendPasswordResetEmail(email: email);
       return null;
     } on FirebaseAuthException catch (error) {
-      return error;
+      return _customErrorFromFirebaseAuthException(error);
     }
   }
 
@@ -52,7 +57,7 @@ class AuthService {
       await _auth.signOut();
       return null;
     } on FirebaseAuthException catch (error) {
-      return error;
+      return _customErrorFromFirebaseAuthException(error);
     }
   }
 }

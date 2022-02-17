@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/auth/models/custom_error_model.dart';
 import 'package:plant_care/auth/services/auth_service.dart';
 import 'package:plant_care/auth/services/validation_service.dart';
 import 'package:plant_care/auth/widgets/text_field_widget.dart';
@@ -20,12 +20,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     dynamic result = await AuthService.forgotPassword(
       email.trim(),
     );
-    print(result);
-    if (result is FirebaseAuthException) {
+    if (result is CustomError) {
       setState(() {
-        errorText = result.message!;
+        errorText = result.message;
       });
-      return result.message!;
+      return result.message;
     } else {
       return result;
     }
@@ -68,6 +67,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  const Text(
+                    'Enter the email address for your Plant Care account',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: const Color(0xFF3a4d34),
+                      fontFamily: 'HelveticaNeue',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                  ),
                   errorText != ''
                       ? Padding(
                           padding: const EdgeInsets.only(
@@ -84,16 +93,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ),
                         )
                       : const SizedBox(height: 1),
-                  const Text(
-                    'Enter the email address for your Plant Care account',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: const Color(0xFF3a4d34),
-                      fontFamily: 'HelveticaNeue',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
-                  ),
                   TextInputWidget(
                     controller: _emailController,
                     labelText: 'Email',
@@ -113,8 +112,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               forgotPassword(
                                 _emailController.text,
                               ).then((value) {
-                                Navigator.of(context).pop();
-                                forgotPasswordState.reset();
+                                if (value == null) {
+                                  Navigator.of(context).pop();
+                                  forgotPasswordState.reset();
+                                }
                               });
                             }
                           : null,
