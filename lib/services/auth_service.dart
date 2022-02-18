@@ -5,6 +5,10 @@ import 'package:plant_care/services/services.dart';
 class AuthService {
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
+  static String getCurrentUser() {
+    return _auth.currentUser!.uid;
+  }
+
   // AppUser from Firebase user
   static AppUser? _appUserFromFirebaseUser(User? user) {
     return (user != null) ? AppUser(uid: user.uid) : null;
