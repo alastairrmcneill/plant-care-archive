@@ -22,9 +22,15 @@ class UserDatabaseService {
 class PlantDatabaseService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  static Future<QuerySnapshot> getPlants(uid) async {
-    QuerySnapshot result = await _db.collection('Users').doc(uid).collection('Plants').get();
+  static getAllPlants(PlantNotifier plantNotifier) async {
+    QuerySnapshot snapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').get();
 
-    return result;
+    List<Plant> _plantList = [];
+
+    snapshot.docs.forEach((doc) {
+      Plant plant = Plant.fromJSON(doc.data());
+      _plantList.add(plant);
+    });
+    plantNotifier.setPlantList = _plantList;
   }
 }

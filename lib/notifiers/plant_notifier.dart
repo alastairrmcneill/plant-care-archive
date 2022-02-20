@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:plant_care/models/plant_model.dart';
 
 class PlantNotifier extends ChangeNotifier {
-  List<Plant> _plantList = [];
-  Plant _currentPlant = Plant();
+  List<Plant>? _plantList = null;
+  Plant? _currentPlant = null;
 
-  UnmodifiableListView<Plant> get getPlantList => UnmodifiableListView(_plantList);
-  Plant get getCurrentPlant => _currentPlant;
+  List<Plant>? get plantList => _plantList;
+  Plant? get currentPlant => _currentPlant;
 
   set setPlantList(List<Plant> plantList) {
     _plantList = plantList;
