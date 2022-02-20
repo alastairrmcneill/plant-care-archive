@@ -6,7 +6,6 @@ class AppUser {
   final String lastName;
   final String email;
   final String? profilePictureURL;
-  final List<Plant>? plants;
 
   AppUser({
     this.uid = '',
@@ -14,7 +13,6 @@ class AppUser {
     this.lastName = '',
     this.email = '',
     this.profilePictureURL,
-    this.plants,
   });
 
   Map<String, Object?> toJSON() {
@@ -24,7 +22,6 @@ class AppUser {
       'lastName': lastName,
       'email': email,
       'profilePicutreURL': profilePictureURL,
-      'plants': plants,
     };
   }
 
@@ -42,6 +39,5 @@ class AppUser {
         lastName: lastName ?? this.lastName,
         email: email ?? this.email,
         profilePictureURL: profilePictureURL ?? this.profilePictureURL,
-        plants: plants ?? this.plants,
       );
 }

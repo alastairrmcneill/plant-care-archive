@@ -21,6 +21,8 @@ dependencies:
   provider: ^6.0.2
 
   cupertino_icons: ^1.0.2
+  community_material_icon: ^5.9.55
+  font_awesome_flutter: ^9.2.0
 
 dev_dependencies:
   flutter_test:
@@ -38,8 +40,15 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/icons/
 
   fonts:
     - family: HelveticaNeue
       fonts:
         - asset: assets/fonts/HelveticaNeue.ttc
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Light.ttf
+          weight: 300
+        - asset: fonts/Roboto-Thin.ttf
+          weight: 100

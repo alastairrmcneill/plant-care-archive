@@ -9,6 +9,13 @@ class AuthService {
     return _auth.currentUser!.uid;
   }
 
+  static String getCurrentUsername() {
+    if (_auth.currentUser!.displayName == null) {
+      return 'Friend';
+    }
+    return _auth.currentUser!.displayName!;
+  }
+
   // AppUser from Firebase user
   static AppUser? _appUserFromFirebaseUser(User? user) {
     return (user != null) ? AppUser(uid: user.uid) : null;
@@ -48,6 +55,8 @@ class AuthService {
 
       AppUser newAppUser = appUser.copy(uid: user!.uid);
 
+      await updateDisplayName(user, newAppUser.firstName);
+
       // Add user document to database
       await UserDatabaseService.createUserRecord(newAppUser);
 
@@ -57,6 +66,12 @@ class AuthService {
     } on FirebaseException catch (error) {
       return _customErrorFromFirebaseException(error);
     }
+  }
+
+  static Future updateDisplayName(User user, String displayName) async {
+    // Update user display name
+    await user.updateDisplayName(displayName);
+    await user.reload();
   }
 
   // Forgot password

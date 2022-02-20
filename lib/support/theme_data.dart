@@ -4,6 +4,15 @@ class MyTheme {
   static ThemeData getTheme() {
     return ThemeData(
       primarySwatch: Colors.green,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Color(0xFF1C3F37),
+        elevation: 0,
+        titleTextStyle: TextStyle(
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w300,
+          fontSize: 24,
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
