@@ -10,7 +10,7 @@ class MyTheme {
         titleTextStyle: TextStyle(
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w300,
-          fontSize: 24,
+          fontSize: 30,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

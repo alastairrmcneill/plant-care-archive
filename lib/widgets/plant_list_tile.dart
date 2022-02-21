@@ -1,9 +1,9 @@
-import 'dart:ffi';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/models/models.dart';
 import 'package:plant_care/notifiers/notifiers.dart';
 import 'package:plant_care/screens/screens.dart';
+import 'package:plant_care/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class PlantListTile extends StatelessWidget {
@@ -19,16 +19,16 @@ class PlantListTile extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           plantNotifier.setCurrentPlant = plant;
-          Navigator.push(context, MaterialPageRoute(builder: (_) => PlantDetail()));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => const PlantDetail()));
         },
         child: Container(
           height: 100,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             color: Colors.white,
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: Row(
               children: [
                 Container(
@@ -54,43 +54,54 @@ class PlantListTile extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  //Plant name
+                                  ConstrainedBox(
+                                    constraints: const BoxConstraints(maxHeight: 42),
+                                    child: AutoSizeText(
                                       plant.name,
                                       maxLines: 2,
+                                      wrapWords: true,
+                                      minFontSize: 16,
+                                      overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 22, fontWeight: FontWeight.w400),
                                     ),
-                                    Text(
-                                      plant.latinName != null ? '(${plant.latinName!})' : '',
-                                      maxLines: 1,
-                                      style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12, fontStyle: FontStyle.italic),
-                                    ),
-                                  ],
-                                ),
-                                Text(
+                                  ),
+                                  // Latin name
+                                  Text(
+                                    plant.latinName != null ? '(${plant.latinName!})' : '',
+                                    maxLines: 1,
+                                    style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12, fontStyle: FontStyle.italic),
+                                  ),
+                                ],
+                              ),
+                              // Notes
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: Text(
                                   plant.notes != null ? plant.notes! : '',
                                   maxLines: 2,
                                   style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12, fontWeight: FontWeight.w200),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
+                        // Gap between two columns
+                        const SizedBox(width: 5),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(
-                              'in 33 days',
-                              style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 14),
-                            ),
+                            // Watering time
+                            WateringTime(),
+                            // Room
                             Text(
                               plant.room,
                               style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 14),
@@ -100,64 +111,6 @@ class PlantListTile extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // child: Padding(
-                  //   padding: const EdgeInsets.only(top: 8.0, bottom: 4, left: 8, right: 8),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Flexible(
-                  //             child: ConstrainedBox(
-                  //               constraints: BoxConstraints(maxWidth: 150),
-                  //               child: Text(
-                  //                 plant.name,
-                  //                 maxLines: 2,
-                  //                 overflow: TextOverflow.ellipsis,
-                  //                 softWrap: true,
-                  //                 style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 20),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           Flexible(
-                  //             child: ConstrainedBox(
-                  //               constraints: BoxConstraints(maxWidth: 150),
-                  //               child: Text(
-                  //                 plant.latinName != null ? '(${plant.latinName})' : '',
-                  //                 maxLines: 1,
-                  //                 overflow: TextOverflow.ellipsis,
-                  //                 style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12, fontStyle: FontStyle.italic),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           const SizedBox(height: 10),
-                  //           Flexible(
-                  //             child: ConstrainedBox(
-                  //               constraints: BoxConstraints(maxWidth: 150),
-                  //               child: Text(
-                  //                 plant.notes != null ? '${plant.notes}' : '',
-                  //                 maxLines: 2,
-                  //                 overflow: TextOverflow.ellipsis,
-                  //                 style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 10),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       Expanded(
-                  //         child: Column(
-                  //           crossAxisAlignment: CrossAxisAlignment.end,
-                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //           children: [
-                  //             Text('in 33 days'),
-                  //             Text(plant.room),
-                  //           ],
-                  //         ),
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
                 ),
               ],
             ),
