@@ -24,6 +24,14 @@ class MyTheme {
           ),
         ),
       ),
+      textTheme: const TextTheme(
+        // Text used in tiles
+        headline4: TextStyle(
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w300,
+          color: Color(0xFF1C3F37),
+        ),
+      ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Color(0xFF1C3F37),
         foregroundColor: Colors.white,

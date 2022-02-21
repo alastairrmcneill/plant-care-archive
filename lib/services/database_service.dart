@@ -31,6 +31,6 @@ class PlantDatabaseService {
       Plant plant = Plant.fromJSON(doc.data());
       _plantList.add(plant);
     });
-    plantNotifier.setPlantList = _plantList;
+    plantNotifier.setPlantList = _plantList + _plantList + _plantList + _plantList + _plantList + _plantList;
   }
 }

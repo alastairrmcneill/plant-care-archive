@@ -31,7 +31,6 @@ class AppUser {
     String? lastName,
     String? email,
     String? profilePicutreURL,
-    List<Plant>? plants,
   }) =>
       AppUser(
         uid: uid ?? this.uid,
