@@ -36,7 +36,7 @@ class PlantListTile extends StatelessWidget {
                   decoration: const BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.all(
-                      Radius.circular(0),
+                      Radius.circular(20),
                     ),
                   ),
                   child: Image.asset(
@@ -45,67 +45,35 @@ class PlantListTile extends StatelessWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 8,
-                      right: 12,
-                      top: 4,
-                      bottom: 4,
-                    ),
-                    child: Row(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //Plant name
-                                  ConstrainedBox(
-                                    constraints: const BoxConstraints(maxHeight: 42),
-                                    child: AutoSizeText(
-                                      plant.name,
-                                      maxLines: 2,
-                                      wrapWords: true,
-                                      minFontSize: 16,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 22, fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
-                                  // Latin name
-                                  Text(
-                                    plant.latinName != null ? '(${plant.latinName!})' : '',
-                                    maxLines: 1,
-                                    style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12, fontStyle: FontStyle.italic),
-                                  ),
-                                ],
-                              ),
-                              // Notes
-                              Padding(
-                                padding: const EdgeInsets.only(right: 4.0),
-                                child: Text(
-                                  plant.notes != null ? plant.notes! : '',
-                                  maxLines: 2,
-                                  style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12, fontWeight: FontWeight.w200),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Gap between two columns
-                        const SizedBox(width: 5),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Watering time
-                            WateringTime(),
-                            // Room
-                            Text(
-                              plant.room,
-                              style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 14),
+                            AutoSizeText(
+                              plant.name,
+                              maxLines: 2,
+                              wrapWords: true,
+                              minFontSize: 16,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 22, fontWeight: FontWeight.w400),
                             ),
+                            Text(
+                              'Location: ${plant.room}',
+                              maxLines: 1,
+                              style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12, fontStyle: FontStyle.italic),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            WateringTimeIcon(),
+                            SizedBox(width: 10),
+                            SunlightIcon(),
                           ],
                         ),
                       ],

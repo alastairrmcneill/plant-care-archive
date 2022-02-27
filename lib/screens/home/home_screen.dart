@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       ),
       body: Column(
         children: [
-          WaterToday(),
+          WaterTodayListView(),
           Expanded(
             child: PlantListView(),
           )
