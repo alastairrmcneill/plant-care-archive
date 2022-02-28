@@ -24,6 +24,7 @@ dependencies:
   community_material_icon: ^5.9.55
   font_awesome_flutter: ^9.2.0
   weather_icons: ^3.0.0
+  flutter_tabler_icons: ^1.1.1
 
   auto_size_text: ^3.0.0
 

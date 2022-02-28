@@ -29,7 +29,11 @@ class WateringTimeIcon extends StatelessWidget {
           ),
           Text(
             '30 days',
-            style: Theme.of(context).textTheme.headline4!.copyWith(color: const Color(0xFF3AB8FF), fontWeight: FontWeight.w700, fontSize: 10),
+            style: Theme.of(context).textTheme.headline4!.copyWith(
+                  color: const Color(0xFF3AB8FF),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 10,
+                ),
           ),
         ],
       ),
