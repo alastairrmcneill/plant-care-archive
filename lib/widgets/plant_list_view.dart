@@ -17,7 +17,7 @@ class _PlantListViewState extends State<PlantListView> {
     super.initState();
 
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context, listen: false);
-    PlantDatabaseService.getAllPlants(plantNotifier);
+    PlantDatabaseService.getAllNotWateringTodayPlants(plantNotifier);
   }
 
   @override
@@ -31,16 +31,16 @@ class _PlantListViewState extends State<PlantListView> {
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           )),
-      child: plantNotifier.plantList != null
+      child: plantNotifier.notWateringPlantList != null
           ? ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
               ),
               child: RefreshIndicator(
-                onRefresh: () => PlantDatabaseService.getAllPlants(plantNotifier),
+                onRefresh: () => PlantDatabaseService.getAllNotWateringTodayPlants(plantNotifier),
                 child: ListView(
-                  children: plantNotifier.plantList!.map((plant) {
+                  children: plantNotifier.notWateringPlantList!.map((plant) {
                     return PlantListTile(plant: plant);
                   }).toList(),
                 ),

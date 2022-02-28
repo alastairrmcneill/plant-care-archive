@@ -22,8 +22,20 @@ class UserDatabaseService {
 class PlantDatabaseService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  static getAllPlants(PlantNotifier plantNotifier) async {
-    QuerySnapshot snapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').get();
+  // static getAllPlants(PlantNotifier plantNotifier) async {
+  //   QuerySnapshot snapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').get();
+
+  //   List<Plant> _plantList = [];
+
+  //   snapshot.docs.forEach((doc) {
+  //     Plant plant = Plant.fromJSON(doc.data());
+  //     _plantList.add(plant);
+  //   });
+  //   plantNotifier.setPlantList = _plantList + _plantList + _plantList + _plantList + _plantList + _plantList;
+  // }
+
+  static getAllNotWateringTodayPlants(PlantNotifier plantNotifier) async {
+    QuerySnapshot snapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').where('nextWaterDate', isGreaterThan: Timestamp.now()).get();
 
     List<Plant> _plantList = [];
 
@@ -31,6 +43,17 @@ class PlantDatabaseService {
       Plant plant = Plant.fromJSON(doc.data());
       _plantList.add(plant);
     });
-    plantNotifier.setPlantList = _plantList + _plantList + _plantList + _plantList + _plantList + _plantList;
+    plantNotifier.setNotWateringPlantList = _plantList;
+  }
+
+  static getTodaysWateringPlants(PlantNotifier plantNotifier) async {
+    QuerySnapshot snapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').where('nextWaterDate', isLessThan: Timestamp.now()).get();
+
+    List<Plant> _plantList = [];
+    snapshot.docs.forEach((doc) {
+      Plant plant = Plant.fromJSON(doc.data());
+      _plantList.add(plant);
+    });
+    plantNotifier.setWaterPlantList = _plantList;
   }
 }

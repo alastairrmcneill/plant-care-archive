@@ -1,17 +1,22 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:plant_care/models/plant_model.dart';
 
 class PlantNotifier extends ChangeNotifier {
-  List<Plant>? _plantList = null;
-  Plant? _currentPlant = null;
+  List<Plant>? _notWateringPlantList;
+  List<Plant>? _waterPlantList;
+  Plant? _currentPlant;
 
-  List<Plant>? get plantList => _plantList;
+  List<Plant>? get notWateringPlantList => _notWateringPlantList;
+  List<Plant>? get waterPlantList => _waterPlantList;
   Plant? get currentPlant => _currentPlant;
 
-  set setPlantList(List<Plant> plantList) {
-    _plantList = plantList;
+  set setNotWateringPlantList(List<Plant> notWateringPlantList) {
+    _notWateringPlantList = notWateringPlantList;
+    notifyListeners();
+  }
+
+  set setWaterPlantList(List<Plant> waterPlantList) {
+    _waterPlantList = waterPlantList;
     notifyListeners();
   }
 

@@ -18,16 +18,17 @@ class _WaterTodayListViewState extends State<WaterTodayListView> {
 
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context, listen: false);
     // Replace with get water today plants.
-    PlantDatabaseService.getAllPlants(plantNotifier);
+    PlantDatabaseService.getTodaysWateringPlants(plantNotifier);
   }
 
   @override
   Widget build(BuildContext context) {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
+    print(plantNotifier.waterPlantList);
 
     return SizedBox(
       height: 200,
-      child: plantNotifier.plantList == null
+      child: plantNotifier.waterPlantList == null
           ? const Center(child: CircularProgressIndicator())
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,14 +45,20 @@ class _WaterTodayListViewState extends State<WaterTodayListView> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: plantNotifier.plantList!.map((plant) {
-                      return WaterTodayPlantTile(plant: plant);
-                    }).toList(),
-                  ),
-                ),
+                plantNotifier.waterPlantList!.isNotEmpty
+                    ? Expanded(
+                        child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: plantNotifier.waterPlantList!.map((plant) {
+                          return WaterTodayPlantTile(plant: plant);
+                        }).toList(),
+                      ))
+                    : const Center(
+                        child: Text(
+                          'All caught up',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
               ],
             ),
     );

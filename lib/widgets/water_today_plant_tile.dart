@@ -36,7 +36,6 @@ class _WaterTodayPlantTileState extends State<WaterTodayPlantTile> {
         child: Container(
           width: 100,
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
           child: ClipRRect(
@@ -55,6 +54,11 @@ class _WaterTodayPlantTileState extends State<WaterTodayPlantTile> {
                     ),
                   ),
                 ),
+                watered
+                    ? Container()
+                    : Container(
+                        color: Colors.black.withOpacity(0.2),
+                      ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
