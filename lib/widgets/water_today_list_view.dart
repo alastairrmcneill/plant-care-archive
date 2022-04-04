@@ -24,7 +24,6 @@ class _WaterTodayListViewState extends State<WaterTodayListView> {
   @override
   Widget build(BuildContext context) {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
-    print(plantNotifier.waterPlantList);
 
     return SizedBox(
       height: 200,
@@ -48,11 +47,12 @@ class _WaterTodayListViewState extends State<WaterTodayListView> {
                 plantNotifier.waterPlantList!.isNotEmpty
                     ? Expanded(
                         child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: plantNotifier.waterPlantList!.map((plant) {
-                          return WaterTodayPlantTile(plant: plant);
-                        }).toList(),
-                      ))
+                          scrollDirection: Axis.horizontal,
+                          children: plantNotifier.waterPlantList!.map((plant) {
+                            return WaterTodayPlantTile(plant: plant);
+                          }).toList(),
+                        ),
+                      )
                     : const Center(
                         child: Text(
                           'All caught up',

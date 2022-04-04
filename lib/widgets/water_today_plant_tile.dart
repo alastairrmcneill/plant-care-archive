@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:plant_care/models/models.dart';
 import 'package:plant_care/notifiers/notifiers.dart';
 import 'package:plant_care/screens/screens.dart';
+import 'package:plant_care/services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
@@ -15,7 +16,6 @@ class WaterTodayPlantTile extends StatefulWidget {
 }
 
 class _WaterTodayPlantTileState extends State<WaterTodayPlantTile> {
-  bool watered = false;
   @override
   Widget build(BuildContext context) {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
@@ -28,9 +28,8 @@ class _WaterTodayPlantTileState extends State<WaterTodayPlantTile> {
           Navigator.push(context, MaterialPageRoute(builder: (_) => const PlantDetail()));
         },
         onLongPress: () {
-          setState(() {
-            watered = !watered;
-          });
+          plantNotifier.setCurrentPlant = widget.plant;
+          waterPlant(plantNotifier);
           HapticFeedback.vibrate();
         },
         child: Container(
@@ -54,11 +53,6 @@ class _WaterTodayPlantTileState extends State<WaterTodayPlantTile> {
                     ),
                   ),
                 ),
-                watered
-                    ? Container()
-                    : Container(
-                        color: Colors.black.withOpacity(0.2),
-                      ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
@@ -75,10 +69,10 @@ class _WaterTodayPlantTileState extends State<WaterTodayPlantTile> {
                     ),
                   ),
                 ),
-                Align(
+                const Align(
                   alignment: Alignment.center,
                   child: Icon(
-                    watered ? Icons.check_rounded : TablerIcons.droplet,
+                    TablerIcons.droplet,
                     color: Color(0xFFECF1EA),
                     size: 80,
                   ),

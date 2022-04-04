@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:plant_care/screens/screens.dart';
 import 'package:plant_care/services/services.dart';
 import 'package:plant_care/widgets/widgets.dart';
 
@@ -46,9 +47,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('Add Plant');
-        },
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AddPlant())),
         child: const Icon(
           Icons.add,
           size: 30,
