@@ -54,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ),
       ),
       body: Column(
-        children: [
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
           WaterTodayListView(),
           Expanded(
             child: PlantListView(),
