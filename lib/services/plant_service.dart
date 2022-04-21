@@ -11,11 +11,15 @@ void waterPlant(PlantNotifier plantNotifier) {
   DateTime now = DateTime.now();
   DateTime date = DateTime(now.year, now.month, now.day);
 
-  Timestamp nextWaterDate = Timestamp.fromDate(date.add(
-    Duration(days: plantNotifier.currentPlant!.wateringFrequency),
-  ));
+  Timestamp nextWaterDate = Timestamp.fromDate(
+    date.add(
+      Duration(days: plantNotifier.currentPlant!.wateringFrequency),
+    ),
+  );
 
-  Plant newPlant = plantNotifier.currentPlant!.copy(nextWaterDate: nextWaterDate);
+  Timestamp lastWateredDate = Timestamp.fromDate(date);
+
+  Plant newPlant = plantNotifier.currentPlant!.copy(nextWaterDate: nextWaterDate, lastWateredDate: lastWateredDate);
 
   PlantDatabaseService.updatePlant(plantNotifier, newPlant);
 }
