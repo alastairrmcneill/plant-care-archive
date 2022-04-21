@@ -71,7 +71,7 @@ class PlantListTile extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            WateringTimeIcon(),
+                            WateringTimeIcon(nextWateringDate: plant.nextWaterDate),
                             SizedBox(width: 10),
                             SunlightIcon(),
                           ],
