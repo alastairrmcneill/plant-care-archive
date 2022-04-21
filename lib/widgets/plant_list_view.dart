@@ -20,6 +20,11 @@ class _PlantListViewState extends State<PlantListView> {
     PlantDatabaseService.getAllNotWateringTodayPlants(plantNotifier);
   }
 
+  Future<void> refresh(PlantNotifier plantNotifier) async {
+    PlantDatabaseService.getAllNotWateringTodayPlants(plantNotifier);
+    PlantDatabaseService.getTodaysWateringPlants(plantNotifier);
+  }
+
   @override
   Widget build(BuildContext context) {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
@@ -38,7 +43,7 @@ class _PlantListViewState extends State<PlantListView> {
                 topRight: Radius.circular(30),
               ),
               child: RefreshIndicator(
-                onRefresh: () => PlantDatabaseService.getAllNotWateringTodayPlants(plantNotifier),
+                onRefresh: () => refresh(plantNotifier),
                 child: ListView(
                   children: plantNotifier.notWateringPlantList!.map((plant) {
                     return PlantListTile(plant: plant);

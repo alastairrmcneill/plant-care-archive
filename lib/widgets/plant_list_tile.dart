@@ -73,7 +73,7 @@ class PlantListTile extends StatelessWidget {
                           children: [
                             WateringTimeIcon(nextWateringDate: plant.nextWaterDate),
                             SizedBox(width: 10),
-                            SunlightIcon(),
+                            // SunlightIcon(),
                           ],
                         ),
                       ],
