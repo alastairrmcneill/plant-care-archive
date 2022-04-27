@@ -15,31 +15,38 @@ class AddPlant extends StatefulWidget {
 }
 
 class _AddPlantState extends State<AddPlant> {
+  late String _name;
+  late String _latinName;
+  late String _room;
+  late String _wateringFrequency;
+  late String _notes;
+  late String _dateLastWatered;
   DateTime? pickedDate;
-  TextEditingController nameController = TextEditingController();
-  TextEditingController latinNameController = TextEditingController();
-  TextEditingController roomController = TextEditingController();
-  TextEditingController notesController = TextEditingController();
-  TextEditingController wateringFrequencyController = TextEditingController();
-  TextEditingController dateTimeController = TextEditingController();
 
-  Future<void> createPlant(PlantNotifier plantNotifier) async {
-    Plant plant = Plant(
-      name: nameController.text,
-      latinName: latinNameController.text,
-      room: roomController.text,
-      notes: notesController.text,
-      wateringFrequency: int.parse(wateringFrequencyController.text),
-      lastWateredDate: Timestamp.fromDate(pickedDate!),
-      nextWaterDate: Timestamp.fromDate(pickedDate!.add(Duration(days: int.parse(wateringFrequencyController.text)))),
-      uid: '',
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void createPlant(PlantNotifier plantNotifier) {}
+
+  Widget _buildName() {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'Name',
+      ),
+      validator: (value) {
+        print(value);
+      },
+      onSaved: (value) {
+        _name = value!;
+      },
     );
+  }
 
-    bool success = await PlantDatabaseService.createPlant(plantNotifier, plant);
+  Widget _buildWateringFrequency() {
+    return TextFormField();
+  }
 
-    if (success) {
-      Navigator.pop(context);
-    }
+  Widget _buildDateLastWatered() {
+    return TextFormField();
   }
 
   @override
@@ -52,61 +59,54 @@ class _AddPlantState extends State<AddPlant> {
         actions: [
           IconButton(
             onPressed: () {
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+              _formKey.currentState!.save();
               createPlant(plantNotifier);
             },
             icon: Icon(Icons.check_rounded),
           ),
         ],
       ),
-      body: Column(
-        children: [
-          TextFormField(
-            controller: nameController,
-            decoration: InputDecoration(labelText: 'Name'),
-          ),
-          TextFormField(
-            controller: latinNameController,
-            decoration: InputDecoration(labelText: 'Latin Name'),
-          ),
-          TextFormField(
-            controller: roomController,
-            decoration: InputDecoration(labelText: 'Room'),
-          ),
-          TextField(
-            controller: dateTimeController, //editing controller of this TextField
-            decoration: const InputDecoration(
-                //icon of text field
-                labelText: "Date Last Watered" //label text of field
-                ),
-            readOnly: true, //set it true, so that user will not able to edit text
-            onTap: () async {
-              pickedDate = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2000),
-                lastDate: DateTime.now(),
-              );
-
-              if (pickedDate != null) {
-                String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate!);
-
-                setState(() {
-                  dateTimeController.text = formattedDate; //set output date to TextField value.
-                });
-              }
-            },
-          ),
-          TextFormField(
-            controller: wateringFrequencyController,
-            decoration: InputDecoration(labelText: 'Watering Frequency'),
-            keyboardType: TextInputType.number,
-          ),
-          TextFormField(
-            controller: notesController,
-            decoration: InputDecoration(labelText: 'Notes'),
-          ),
-        ],
+      body: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _buildName(),
+            _buildWateringFrequency(),
+            _buildDateLastWatered(),
+          ],
+        ),
       ),
     );
   }
 }
+
+
+// TextField(
+//             controller: dateTimeController, //editing controller of this TextField
+//             decoration: const InputDecoration(
+//                 //icon of text field
+//                 labelText: "Date Last Watered" //label text of field
+//                 ),
+//             readOnly: true, //set it true, so that user will not able to edit text
+//             onTap: () async {
+//               pickedDate = await showDatePicker(
+//                 context: context,
+//                 initialDate: DateTime.now(),
+//                 firstDate: DateTime(2000),
+//                 lastDate: DateTime.now(),
+//               );
+
+//               if (pickedDate != null) {
+//                 String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate!);
+
+//                 setState(() {
+//                   dateTimeController.text = formattedDate; //set output date to TextField value.
+//                 });
+//               }
+//             },
+//           ),
