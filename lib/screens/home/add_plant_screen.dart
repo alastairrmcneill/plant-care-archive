@@ -21,13 +21,28 @@ class _AddPlantState extends State<AddPlant> {
   late String _room;
   late int _wateringFrequency;
   late String _notes;
-  late Timestamp _dateLastWatered;
+  late DateTime _dateLastWatered;
   DateTime? _pickedDate;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _dateTimeController = TextEditingController();
 
-  void createPlant(PlantNotifier plantNotifier) {}
+  Future<void> createPlant(PlantNotifier plantNotifier) async {
+    Plant plant = Plant(
+      uid: '',
+      name: _name,
+      lastWateredDate: Timestamp.fromDate(_dateLastWatered),
+      nextWaterDate: Timestamp.fromDate(_dateLastWatered.add(Duration(days: _wateringFrequency))),
+      wateringFrequency: _wateringFrequency,
+      room: '',
+    );
+
+    bool success = await PlantDatabaseService.createPlant(plantNotifier, plant);
+
+    if (success) {
+      Navigator.pop(context);
+    }
+  }
 
   Widget _buildName() {
     return Padding(
@@ -108,7 +123,7 @@ class _AddPlantState extends State<AddPlant> {
           }
         },
         onSaved: (value) {
-          _dateLastWatered = Timestamp.fromDate(DateFormat('dd/MM/yyyy').parse(_dateTimeController.text));
+          _dateLastWatered = DateFormat('dd/MM/yyyy').parse(_dateTimeController.text);
         },
       ),
     );
