@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:plant_care/models/models.dart';
 import 'package:plant_care/notifiers/notifiers.dart';
 import 'package:plant_care/services/database_service.dart';
+import 'package:plant_care/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class AddPlant extends StatefulWidget {
@@ -18,35 +19,99 @@ class _AddPlantState extends State<AddPlant> {
   late String _name;
   late String _latinName;
   late String _room;
-  late String _wateringFrequency;
+  late int _wateringFrequency;
   late String _notes;
-  late String _dateLastWatered;
-  DateTime? pickedDate;
+  late Timestamp _dateLastWatered;
+  DateTime? _pickedDate;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _dateTimeController = TextEditingController();
 
   void createPlant(PlantNotifier plantNotifier) {}
 
   Widget _buildName() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Name',
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        decoration: const InputDecoration(
+          labelText: 'Name',
+        ),
+        textInputAction: TextInputAction.next,
+        maxLines: 1,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Required';
+          }
+        },
+        onSaved: (value) {
+          _name = value!;
+        },
       ),
-      validator: (value) {
-        print(value);
-      },
-      onSaved: (value) {
-        _name = value!;
-      },
     );
   }
 
   Widget _buildWateringFrequency() {
-    return TextFormField();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        decoration: InputDecoration(labelText: 'Watering Frequency'),
+        maxLines: 1,
+        keyboardType: TextInputType.number,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Required';
+          }
+
+          int? freq = int.tryParse(value);
+
+          if (freq == null || freq <= 0) {
+            return 'Frequency must be greater than 0.';
+          }
+
+          return null;
+        },
+        onSaved: (value) {
+          _wateringFrequency = int.parse(value!);
+        },
+      ),
+    );
   }
 
   Widget _buildDateLastWatered() {
-    return TextFormField();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: _dateTimeController,
+        decoration: const InputDecoration(
+          labelText: "Date Last Watered",
+        ),
+        readOnly: true,
+        onTap: () async {
+          _pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime.now(),
+          );
+
+          if (_pickedDate != null) {
+            String formattedDate = DateFormat('dd/MM/yyyy').format(_pickedDate!);
+
+            setState(() {
+              _dateTimeController.text = formattedDate;
+            });
+          }
+        },
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Required';
+          }
+        },
+        onSaved: (value) {
+          _dateLastWatered = Timestamp.fromDate(DateFormat('dd/MM/yyyy').parse(_dateTimeController.text));
+        },
+      ),
+    );
   }
 
   @override
@@ -63,22 +128,30 @@ class _AddPlantState extends State<AddPlant> {
                 return;
               }
               _formKey.currentState!.save();
+
               createPlant(plantNotifier);
             },
             icon: Icon(Icons.check_rounded),
           ),
         ],
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildName(),
-            _buildWateringFrequency(),
-            _buildDateLastWatered(),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 10,
+          right: 10,
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildName(),
+              _buildWateringFrequency(),
+              _buildDateLastWatered(),
+            ],
+          ),
         ),
       ),
     );
