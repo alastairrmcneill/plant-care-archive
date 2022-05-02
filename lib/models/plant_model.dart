@@ -9,7 +9,7 @@ class Plant {
   final Timestamp nextWaterDate;
   final int wateringFrequency;
   final String? notes;
-  final String room;
+  final String household;
 
   Plant({
     required this.uid,
@@ -20,7 +20,7 @@ class Plant {
     required this.nextWaterDate,
     required this.wateringFrequency,
     this.notes,
-    required this.room,
+    required this.household,
   });
 
   Plant copy({
@@ -32,7 +32,7 @@ class Plant {
     Timestamp? nextWaterDate,
     int? wateringFrequency,
     String? notes,
-    String? room,
+    String? household,
   }) =>
       Plant(
         uid: uid ?? this.uid,
@@ -43,7 +43,7 @@ class Plant {
         wateringFrequency: wateringFrequency ?? this.wateringFrequency,
         pictureURL: pictureURL ?? this.pictureURL,
         notes: notes ?? this.notes,
-        room: room ?? this.room,
+        household: household ?? this.household,
       );
 
   Map<String, Object?> toJSON() {
@@ -56,7 +56,7 @@ class Plant {
       'nextWaterDate': nextWaterDate,
       'wateringFrequency': wateringFrequency,
       'notes': notes,
-      'room': room,
+      'household': household,
     };
   }
 
@@ -70,7 +70,7 @@ class Plant {
       wateringFrequency: json['wateringFrequency'] as int,
       pictureURL: json['pictureURL'] as String?,
       notes: json['notes'] as String?,
-      room: json['room'] as String,
+      household: json['household'] as String,
     );
   }
 }
