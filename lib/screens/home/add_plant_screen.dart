@@ -69,7 +69,7 @@ class _AddPlantState extends State<AddPlant> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'Watering Frequency'),
+        decoration: InputDecoration(labelText: 'Watering Frequency (days)'),
         maxLines: 1,
         keyboardType: TextInputType.number,
         validator: (value) {
