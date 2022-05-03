@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:plant_care/notifiers/notifiers.dart';
 import 'package:plant_care/screens/screens.dart';
 import 'package:plant_care/services/services.dart';
 import 'package:plant_care/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -48,12 +50,24 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AddPlant())),
-        child: const Icon(
-          Icons.add,
-          size: 30,
-        ),
+      floatingActionButton: SpeedDial(
+        icon: Icons.add,
+        children: [
+          SpeedDialChild(
+            child: const Icon(FontAwesomeIcons.home),
+            label: 'Household',
+            onTap: () {
+              print('Add household');
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(FontAwesomeIcons.seedling),
+            label: 'Plant',
+            onTap: () {
+              print('Add Plant');
+            },
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,3 +81,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 }
+
+
+// FloatingActionButton(
+//         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AddPlant())),
+//         child: const Icon(
+//           Icons.add,
+//           size: 30,
+//         ),
+//       ),

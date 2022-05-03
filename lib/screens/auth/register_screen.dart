@@ -26,11 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FocusNode _passwordFocus2 = FocusNode();
 
   Future _register(String email, String password1, String password2) async {
-    AppUser appUser = AppUser(
-      firstName: _firstNameController.text.trim(),
-      lastName: _lastNameController.text.trim(),
-      email: _emailController.text.trim(),
-    );
+    AppUser appUser = AppUser(firstName: _firstNameController.text.trim(), lastName: _lastNameController.text.trim(), email: _emailController.text.trim(), households: []);
 
     if (password1 == password2) {
       dynamic result = await AuthService.registerWithEmailPassword(

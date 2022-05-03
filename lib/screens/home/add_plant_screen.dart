@@ -29,13 +29,12 @@ class _AddPlantState extends State<AddPlant> {
 
   Future<void> createPlant(PlantNotifier plantNotifier) async {
     Plant plant = Plant(
-      uid: '',
-      name: _name,
-      lastWateredDate: Timestamp.fromDate(_dateLastWatered),
-      nextWaterDate: Timestamp.fromDate(_dateLastWatered.add(Duration(days: _wateringFrequency))),
-      wateringFrequency: _wateringFrequency,
-      room: '',
-    );
+        uid: '',
+        name: _name,
+        lastWateredDate: Timestamp.fromDate(_dateLastWatered),
+        nextWaterDate: Timestamp.fromDate(_dateLastWatered.add(Duration(days: _wateringFrequency))),
+        wateringFrequency: _wateringFrequency,
+        household: '');
 
     bool success = await PlantDatabaseService.createPlant(plantNotifier, plant);
 

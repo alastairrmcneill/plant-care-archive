@@ -10,6 +10,7 @@ class Plant {
   final int wateringFrequency;
   final String? notes;
   final String household;
+  final String? lastWateredBy;
 
   Plant({
     required this.uid,
@@ -21,19 +22,20 @@ class Plant {
     required this.wateringFrequency,
     this.notes,
     required this.household,
+    this.lastWateredBy,
   });
 
-  Plant copy({
-    String? uid,
-    String? name,
-    String? latinName,
-    String? pictureURL,
-    Timestamp? lastWateredDate,
-    Timestamp? nextWaterDate,
-    int? wateringFrequency,
-    String? notes,
-    String? household,
-  }) =>
+  Plant copy(
+          {String? uid,
+          String? name,
+          String? latinName,
+          String? pictureURL,
+          Timestamp? lastWateredDate,
+          Timestamp? nextWaterDate,
+          int? wateringFrequency,
+          String? notes,
+          String? household,
+          String? lastWateredBy}) =>
       Plant(
         uid: uid ?? this.uid,
         name: name ?? this.name,
@@ -44,6 +46,7 @@ class Plant {
         pictureURL: pictureURL ?? this.pictureURL,
         notes: notes ?? this.notes,
         household: household ?? this.household,
+        lastWateredBy: lastWateredBy ?? this.lastWateredBy,
       );
 
   Map<String, Object?> toJSON() {
@@ -57,6 +60,7 @@ class Plant {
       'wateringFrequency': wateringFrequency,
       'notes': notes,
       'household': household,
+      'lastWateredBy': lastWateredBy,
     };
   }
 
@@ -71,6 +75,7 @@ class Plant {
       pictureURL: json['pictureURL'] as String?,
       notes: json['notes'] as String?,
       household: json['household'] as String,
+      lastWateredBy: json['lastWateredBy'] as String,
     );
   }
 }

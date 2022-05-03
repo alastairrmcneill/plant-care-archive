@@ -5,14 +5,14 @@ class AppUser {
   final String firstName;
   final String lastName;
   final String email;
-  final String? profilePictureURL;
+  final List<String> households;
 
   AppUser({
     this.uid = '',
     this.firstName = '',
     this.lastName = '',
     this.email = '',
-    this.profilePictureURL,
+    required this.households,
   });
 
   Map<String, Object?> toJSON() {
@@ -21,7 +21,7 @@ class AppUser {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
-      'profilePicutreURL': profilePictureURL,
+      'households': households,
     };
   }
 
@@ -30,13 +30,13 @@ class AppUser {
     String? firstName,
     String? lastName,
     String? email,
-    String? profilePicutreURL,
+    List<String>? households,
   }) =>
       AppUser(
         uid: uid ?? this.uid,
         firstName: firstName ?? this.firstName,
         lastName: lastName ?? this.lastName,
         email: email ?? this.email,
-        profilePictureURL: profilePictureURL ?? this.profilePictureURL,
+        households: households ?? this.households,
       );
 }
