@@ -25,6 +25,19 @@ class AppUser {
     };
   }
 
+  static AppUser fromJSON(json) {
+    List<dynamic> households = json['households'];
+    List<String> newHouseholds = List<String>.from(households);
+
+    return AppUser(
+      uid: json['uid'] as String,
+      firstName: json['firstName'] as String,
+      lastName: json['lastName'] as String,
+      email: json['email'] as String,
+      households: newHouseholds,
+    );
+  }
+
   AppUser copy({
     String? uid,
     String? firstName,

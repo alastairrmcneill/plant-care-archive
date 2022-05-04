@@ -17,6 +17,22 @@ class UserDatabaseService {
 
     return await ref.get();
   }
+
+  static Future<AppUser> getUser({required String userID}) async {
+    DocumentReference ref = _db.collection('Users').doc(userID);
+
+    DocumentSnapshot snapshot = await ref.get();
+    Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+
+    AppUser user = AppUser.fromJSON(data);
+    return user;
+  }
+
+  static updateUser(AppUser user) async {
+    DocumentReference ref = _db.collection('Users').doc(user.uid);
+
+    ref.set(user.toJSON());
+  }
 }
 
 class PlantDatabaseService {
@@ -81,5 +97,22 @@ class PlantDatabaseService {
       getAllNotWateringTodayPlants(plantNotifier);
       getTodaysWateringPlants(plantNotifier);
     });
+  }
+}
+
+class HouseholdDatabaseService {
+  static final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  // Create
+  static Future<String> createHousehold(Household household) async {
+    String returnString = '';
+    DocumentReference ref = _db.collection('Households').doc();
+
+    Household newHousehold = household.copy(uid: ref.id);
+
+    await ref.set(newHousehold.toJSON()).whenComplete(() {
+      returnString = ref.id;
+    });
+    return returnString;
   }
 }

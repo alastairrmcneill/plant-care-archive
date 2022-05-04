@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:plant_care/models/household_model.dart';
+import 'package:plant_care/services/services.dart';
 import 'package:plant_care/widgets/widgets.dart';
 
 class AddHousehold extends StatefulWidget {
@@ -35,7 +37,7 @@ class _AddHouseholdState extends State<AddHousehold> {
               width: 100,
               child: ElevatedButton(
                 onPressed: () {
-                  print('Create');
+                  createHousehold(_nameController.text.trim());
                 },
                 child: const Text('Create'),
               ),
