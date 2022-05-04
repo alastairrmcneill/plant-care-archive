@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:plant_care/notifiers/notifiers.dart';
+import 'package:plant_care/screens/home/add_household_screen.dart';
 import 'package:plant_care/screens/screens.dart';
 import 'package:plant_care/services/services.dart';
 import 'package:plant_care/widgets/widgets.dart';
@@ -56,9 +57,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           SpeedDialChild(
             child: const Icon(FontAwesomeIcons.home),
             label: 'Household',
-            onTap: () {
-              print('Add household');
-            },
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AddHousehold())),
           ),
           SpeedDialChild(
             child: const Icon(FontAwesomeIcons.seedling),

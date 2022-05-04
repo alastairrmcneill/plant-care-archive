@@ -4,10 +4,10 @@ class TextInputWidget extends StatefulWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final String labelText;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final bool isPassword;
-  final TextInputAction textInputAction;
-  final TextInputType keyboardType;
+  final TextInputAction? textInputAction;
+  final TextInputType? keyboardType;
   final Function(String)? submittedFunc;
   final Function(String)? onChanged;
 
@@ -16,10 +16,10 @@ class TextInputWidget extends StatefulWidget {
     this.controller,
     this.focusNode,
     required this.labelText,
-    required this.prefixIcon,
+    this.prefixIcon,
     required this.isPassword,
-    required this.textInputAction,
-    required this.keyboardType,
+    this.textInputAction,
+    this.keyboardType,
     this.submittedFunc,
     this.onChanged,
   });
@@ -58,7 +58,7 @@ class _TextInputWidgetState extends State<TextInputWidget> {
         },
         obscureText: obscureText,
         decoration: InputDecoration(
-          prefixIcon: Icon(widget.prefixIcon),
+          prefixIcon: widget.prefixIcon == null ? null : Icon(widget.prefixIcon),
           labelText: widget.labelText,
           suffixIcon: widget.isPassword
               ? IconButton(
@@ -70,7 +70,6 @@ class _TextInputWidgetState extends State<TextInputWidget> {
                   icon: obscureText ? const Icon(Icons.visibility_off_rounded) : Icon(Icons.visibility_rounded),
                 )
               : null,
-          fillColor: const Color(0xFF3a4d34).withOpacity(0.1),
         ),
       ),
     );

@@ -37,6 +37,7 @@ class MyTheme {
         foregroundColor: Colors.white,
       ),
       inputDecorationTheme: InputDecorationTheme(
+        fillColor: const Color(0xFF3a4d34).withOpacity(0.1),
         focusColor: Colors.green,
         filled: true,
         enabledBorder: UnderlineInputBorder(
@@ -55,6 +56,11 @@ class MyTheme {
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
+      ),
+      dividerTheme: const DividerThemeData(
+        thickness: 2,
+        indent: 5,
+        endIndent: 5,
       ),
     );
   }
