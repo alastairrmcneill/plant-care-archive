@@ -23,6 +23,7 @@ class _AddPlantState extends State<AddPlant> {
   late String _notes;
   late DateTime _dateLastWatered;
   DateTime? _pickedDate;
+  late String _household;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _dateTimeController = TextEditingController();
@@ -34,7 +35,7 @@ class _AddPlantState extends State<AddPlant> {
         lastWateredDate: Timestamp.fromDate(_dateLastWatered),
         nextWaterDate: Timestamp.fromDate(_dateLastWatered.add(Duration(days: _wateringFrequency))),
         wateringFrequency: _wateringFrequency,
-        household: '');
+        household: '1NMW8aD6Owv7trDlTTlC');
 
     bool success = await PlantDatabaseService.createPlant(plantNotifier, plant);
 
@@ -128,6 +129,38 @@ class _AddPlantState extends State<AddPlant> {
     );
   }
 
+  Widget _buildHousehold() {
+    List<String> items = [
+      '128 Heron House',
+      'Falmouth Road',
+      '1281 Heron House',
+      'Falmouths Road',
+    ];
+    String? selectedItem = items[0];
+
+    return DropdownButtonFormField(
+      value: selectedItem,
+      items: items.map((String item) {
+        return DropdownMenuItem(
+          value: item,
+          child: Row(
+            children: <Widget>[
+              Text(item),
+            ],
+          ),
+        );
+      }).toList(),
+      onChanged: (item) {
+        setState(() {
+          selectedItem = item as String;
+        });
+      },
+      onSaved: (value) {
+        _household = value as String;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
@@ -164,6 +197,7 @@ class _AddPlantState extends State<AddPlant> {
               _buildName(),
               _buildWateringFrequency(),
               _buildDateLastWatered(),
+              _buildHousehold(),
             ],
           ),
         ),
@@ -171,29 +205,3 @@ class _AddPlantState extends State<AddPlant> {
     );
   }
 }
-
-
-// TextField(
-//             controller: dateTimeController, //editing controller of this TextField
-//             decoration: const InputDecoration(
-//                 //icon of text field
-//                 labelText: "Date Last Watered" //label text of field
-//                 ),
-//             readOnly: true, //set it true, so that user will not able to edit text
-//             onTap: () async {
-//               pickedDate = await showDatePicker(
-//                 context: context,
-//                 initialDate: DateTime.now(),
-//                 firstDate: DateTime(2000),
-//                 lastDate: DateTime.now(),
-//               );
-
-//               if (pickedDate != null) {
-//                 String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate!);
-
-//                 setState(() {
-//                   dateTimeController.text = formattedDate; //set output date to TextField value.
-//                 });
-//               }
-//             },
-//           ),

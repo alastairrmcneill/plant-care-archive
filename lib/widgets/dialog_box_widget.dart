@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plant_care/screens/home/add_plant_screen.dart';
 
 // 1 button Dialog
 showAlertDialog(BuildContext context) {
@@ -36,6 +37,7 @@ showHouseholdAddedDialog({required BuildContext context, required String title, 
     child: Text('Done'),
     onPressed: () {
       Navigator.of(context).pop();
+      Navigator.of(context).pop();
     },
   );
 
@@ -43,6 +45,8 @@ showHouseholdAddedDialog({required BuildContext context, required String title, 
     child: Text('Add Plant'),
     onPressed: () {
       Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      Navigator.push(context, MaterialPageRoute(builder: (_) => const AddPlant()));
     },
   );
 

@@ -62,9 +62,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           SpeedDialChild(
             child: const Icon(FontAwesomeIcons.seedling),
             label: 'Plant',
-            onTap: () {
-              print('Add Plant');
-            },
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AddPlant())),
           ),
         ],
       ),
@@ -80,12 +78,3 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 }
-
-
-// FloatingActionButton(
-//         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AddPlant())),
-//         child: const Icon(
-//           Icons.add,
-//           size: 30,
-//         ),
-//       ),

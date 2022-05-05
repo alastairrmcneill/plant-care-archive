@@ -75,7 +75,7 @@ class Plant {
       pictureURL: json['pictureURL'] as String?,
       notes: json['notes'] as String?,
       household: json['household'] as String,
-      lastWateredBy: json['lastWateredBy'] as String,
+      lastWateredBy: json['lastWateredBy'] as String?,
     );
   }
 }

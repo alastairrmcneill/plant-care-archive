@@ -42,7 +42,7 @@ class PlantDatabaseService {
 
   static Future<bool> createPlant(PlantNotifier plantNotifier, Plant plant) async {
     bool success = false;
-    DocumentReference ref = _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').doc();
+    DocumentReference ref = _db.collection('Households').doc(plant.household).collection('Plants').doc();
 
     Plant newPlant = plant.copy(uid: ref.id);
 
@@ -57,38 +57,47 @@ class PlantDatabaseService {
     return success;
   }
 
-  // static getAllPlants(PlantNotifier plantNotifier) async {
-  //   QuerySnapshot snapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').get();
-
-  //   List<Plant> _plantList = [];
-
-  //   snapshot.docs.forEach((doc) {
-  //     Plant plant = Plant.fromJSON(doc.data());
-  //     _plantList.add(plant);
-  //   });
-  //   plantNotifier.setPlantList = _plantList + _plantList + _plantList + _plantList + _plantList + _plantList;
-  // }
-
   static getAllNotWateringTodayPlants(PlantNotifier plantNotifier) async {
-    QuerySnapshot snapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').where('nextWaterDate', isGreaterThan: Timestamp.now()).get();
-
     List<Plant> _plantList = [];
 
-    snapshot.docs.forEach((doc) {
-      Plant plant = Plant.fromJSON(doc.data());
-      _plantList.add(plant);
+    // Find all households
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).get();
+
+    Map<String, dynamic> data = docSnapshot.data()!;
+    List<dynamic> householdsRaw = data['households'];
+    List<String> households = List<String>.from(householdsRaw);
+
+    // Loop thruogh households
+    households.forEach((householdID) async {
+      QuerySnapshot snapshot = await _db.collection('Households').doc(householdID).collection('Plants').where('nextWaterDate', isGreaterThan: Timestamp.now()).get();
+      snapshot.docs.forEach((doc) {
+        Plant plant = Plant.fromJSON(doc.data());
+        _plantList.add(plant);
+      });
     });
+
     plantNotifier.setNotWateringPlantList = _plantList;
   }
 
   static getTodaysWateringPlants(PlantNotifier plantNotifier) async {
-    QuerySnapshot snapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').where('nextWaterDate', isLessThan: Timestamp.now()).get();
-
     List<Plant> _plantList = [];
-    snapshot.docs.forEach((doc) {
-      Plant plant = Plant.fromJSON(doc.data());
-      _plantList.add(plant);
+
+    // Find all households
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).get();
+
+    Map<String, dynamic> data = docSnapshot.data()!;
+    List<dynamic> householdsRaw = data['households'];
+    List<String> households = List<String>.from(householdsRaw);
+
+    // Loop thruogh households
+    households.forEach((householdID) async {
+      QuerySnapshot snapshot = await _db.collection('Households').doc('householdID').collection('Plants').where('nextWaterDate', isLessThan: Timestamp.now()).get();
+      snapshot.docs.forEach((doc) {
+        Plant plant = Plant.fromJSON(doc.data());
+        _plantList.add(plant);
+      });
     });
+
     plantNotifier.setWaterPlantList = _plantList;
   }
 
