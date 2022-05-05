@@ -68,13 +68,13 @@ class PlantDatabaseService {
     List<String> households = List<String>.from(householdsRaw);
 
     // Loop thruogh households
-    households.forEach((householdID) async {
-      QuerySnapshot snapshot = await _db.collection('Households').doc(householdID).collection('Plants').where('nextWaterDate', isGreaterThan: Timestamp.now()).get();
+    for (var household in households) {
+      QuerySnapshot snapshot = await _db.collection('Households').doc(household).collection('Plants').where('nextWaterDate', isGreaterThan: Timestamp.now()).get();
       snapshot.docs.forEach((doc) {
         Plant plant = Plant.fromJSON(doc.data());
         _plantList.add(plant);
       });
-    });
+    }
 
     plantNotifier.setNotWateringPlantList = _plantList;
   }
@@ -90,19 +90,19 @@ class PlantDatabaseService {
     List<String> households = List<String>.from(householdsRaw);
 
     // Loop thruogh households
-    households.forEach((householdID) async {
-      QuerySnapshot snapshot = await _db.collection('Households').doc('householdID').collection('Plants').where('nextWaterDate', isLessThan: Timestamp.now()).get();
+    for (var household in households) {
+      QuerySnapshot snapshot = await _db.collection('Households').doc(household).collection('Plants').where('nextWaterDate', isLessThan: Timestamp.now()).get();
       snapshot.docs.forEach((doc) {
         Plant plant = Plant.fromJSON(doc.data());
         _plantList.add(plant);
       });
-    });
+    }
 
     plantNotifier.setWaterPlantList = _plantList;
   }
 
   static updatePlant(PlantNotifier plantNotifier, Plant plant) async {
-    await _db.collection('Users').doc(AuthService.getCurrentUser()).collection('Plants').doc(plant.uid).update(plant.toJSON()).whenComplete(() {
+    await _db.collection('Households').doc(plant.household).collection('Plants').doc(plant.uid).update(plant.toJSON()).whenComplete(() {
       getAllNotWateringTodayPlants(plantNotifier);
       getTodaysWateringPlants(plantNotifier);
     });

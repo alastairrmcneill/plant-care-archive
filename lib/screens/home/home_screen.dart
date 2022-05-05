@@ -17,17 +17,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  late TabController _tabBarViewController;
-  int _selectedIndex = 1;
-
   @override
   void initState() {
     super.initState();
-    _tabBarViewController = TabController(
-      length: 4,
-      vsync: this,
-      initialIndex: 2,
-    );
   }
 
   @override

@@ -17,7 +17,7 @@ class _PlantListViewState extends State<PlantListView> {
     super.initState();
 
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context, listen: false);
-    PlantDatabaseService.getAllNotWateringTodayPlants(plantNotifier);
+    refresh(plantNotifier);
   }
 
   Future<void> refresh(PlantNotifier plantNotifier) async {
