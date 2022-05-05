@@ -115,4 +115,22 @@ class HouseholdDatabaseService {
     });
     return returnString;
   }
+
+  // Read
+  static Future<Household> getHouseholdFromCode(String code) async {
+    Query query = _db.collection('Households').where('code', isEqualTo: code);
+    QuerySnapshot querySnapshot = await query.get();
+
+    List<Household> householdList = querySnapshot.docs.map((doc) => Household.fromJSON(doc)).toList();
+
+    return householdList[0];
+  }
+
+  // Update
+
+  static updateHousehold(Household household) async {
+    DocumentReference ref = _db.collection('Households').doc(household.uid);
+
+    ref.set(household.toJSON());
+  }
 }

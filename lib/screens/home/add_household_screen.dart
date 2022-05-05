@@ -36,8 +36,13 @@ class _AddHouseholdState extends State<AddHousehold> {
             Container(
               width: 100,
               child: ElevatedButton(
-                onPressed: () {
-                  createHousehold(_nameController.text.trim());
+                onPressed: () async {
+                  String code = await createHousehold(_nameController.text.trim());
+                  showHouseholdAddedDialog(
+                    context: context,
+                    title: 'Household created successfully',
+                    message: code,
+                  );
                 },
                 child: const Text('Create'),
               ),
@@ -57,8 +62,14 @@ class _AddHouseholdState extends State<AddHousehold> {
             Container(
               width: 100,
               child: ElevatedButton(
-                onPressed: () {
-                  print('Add');
+                onPressed: () async {
+                  String code = _codeController.text.trim();
+                  String name = await addHousehold(code);
+                  showHouseholdAddedDialog(
+                    context: context,
+                    title: 'House added successfully',
+                    message: name,
+                  );
                 },
                 child: const Text('Add'),
               ),

@@ -14,6 +14,17 @@ class Household {
   });
 
   // From JSON
+  static Household fromJSON(json) {
+    List<dynamic> members = json['members'];
+    List<String> newMembers = List<String>.from(members);
+
+    return Household(
+      uid: json['uid'] as String,
+      name: json['name'] as String,
+      code: json['code'] as String,
+      members: newMembers,
+    );
+  }
 
   // To JSON
   Map<String, Object> toJSON() {
