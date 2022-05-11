@@ -1,17 +1,18 @@
 import 'dart:math';
 
 import 'package:plant_care/models/models.dart';
+import 'package:plant_care/notifiers/notifiers.dart';
 
 import 'services.dart';
 
-Future<String> createHousehold(String name) async {
+Future<String> createHousehold(HouseholdNotifier householdNotifier, String name) async {
   // Get current User ID
   String userID = AuthService.getCurrentUser();
 
   // Create household
   String code = randomString(6);
   Household household = Household(name: name, code: code, members: [userID]);
-  String householdID = await HouseholdDatabaseService.createHousehold(household);
+  String householdID = await HouseholdDatabaseService.createHousehold(householdNotifier, household);
 
   // Update user
   AppUser user = await UserDatabaseService.getUser(userID: userID);

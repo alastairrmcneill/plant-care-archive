@@ -20,6 +20,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
+
+    HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
+    HouseholdDatabaseService.getCurrentUserHouseholds(householdNotifier);
   }
 
   @override

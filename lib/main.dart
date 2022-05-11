@@ -31,6 +31,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<PlantNotifier>(
           create: (_) => PlantNotifier(),
         ),
+        ChangeNotifierProvider<HouseholdNotifier>(
+          create: (_) => HouseholdNotifier(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

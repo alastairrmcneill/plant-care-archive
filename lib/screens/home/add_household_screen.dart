@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:plant_care/models/household_model.dart';
+import 'package:plant_care/notifiers/notifiers.dart';
 import 'package:plant_care/services/services.dart';
 import 'package:plant_care/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class AddHousehold extends StatefulWidget {
   const AddHousehold({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class _AddHouseholdState extends State<AddHousehold> {
 
   @override
   Widget build(BuildContext context) {
+    HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Household'),
@@ -37,7 +40,7 @@ class _AddHouseholdState extends State<AddHousehold> {
               width: 100,
               child: ElevatedButton(
                 onPressed: () async {
-                  String code = await createHousehold(_nameController.text.trim());
+                  String code = await createHousehold(householdNotifier, _nameController.text.trim());
                   showHouseholdAddedDialog(
                     context: context,
                     title: 'Household created successfully',

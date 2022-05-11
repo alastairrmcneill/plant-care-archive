@@ -113,13 +113,15 @@ class HouseholdDatabaseService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // Create
-  static Future<String> createHousehold(Household household) async {
+  static Future<String> createHousehold(HouseholdNotifier householdNotifier, Household household) async {
     String returnString = '';
     DocumentReference ref = _db.collection('Households').doc();
 
     Household newHousehold = household.copy(uid: ref.id);
 
     await ref.set(newHousehold.toJSON()).whenComplete(() {
+      getCurrentUserHouseholds(householdNotifier);
+    }).whenComplete(() {
       returnString = ref.id;
     });
     return returnString;
@@ -135,6 +137,26 @@ class HouseholdDatabaseService {
     return householdList[0];
   }
 
+  static getCurrentUserHouseholds(HouseholdNotifier householdNotifier) async {
+    // Find all households
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).get();
+
+    Map<String, dynamic> data = docSnapshot.data()!;
+    List<dynamic> householdsRaw = data['households'];
+    List<String> householdIDs = List<String>.from(householdsRaw);
+
+    // Get households
+    List<Household> _householdList = [];
+
+    for (var householdID in householdIDs) {
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await _db.collection('Households').doc(householdID).get();
+      Map<String, dynamic>? json = snapshot.data();
+
+      _householdList.add(Household.fromJSON(json));
+    }
+
+    householdNotifier.setUserHouseholds = _householdList;
+  }
   // Update
 
   static updateHousehold(Household household) async {

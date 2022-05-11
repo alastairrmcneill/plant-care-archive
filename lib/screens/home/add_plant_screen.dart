@@ -28,6 +28,14 @@ class _AddPlantState extends State<AddPlant> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _dateTimeController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+
+    HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
+    HouseholdDatabaseService.getCurrentUserHouseholds(householdNotifier);
+  }
+
   Future<void> createPlant(PlantNotifier plantNotifier) async {
     Plant plant = Plant(
         uid: '',
@@ -129,13 +137,16 @@ class _AddPlantState extends State<AddPlant> {
     );
   }
 
-  Widget _buildHousehold() {
-    List<String> items = [
-      '128 Heron House',
-      'Falmouth Road',
-      '1281 Heron House',
-      'Falmouths Road',
-    ];
+  Widget _buildHousehold(HouseholdNotifier householdNotifier) {
+    List<Household> households = householdNotifier.userHouseholds!;
+    List<String> items = [];
+    if (households.isNotEmpty) {
+      households.forEach((household) {
+        items.add(household.name);
+      });
+    } else {
+      items.add('Change to text field!!');
+    }
     String? selectedItem = items[0];
 
     return DropdownButtonFormField(
@@ -164,6 +175,7 @@ class _AddPlantState extends State<AddPlant> {
   @override
   Widget build(BuildContext context) {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
+    HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Plant'),
@@ -197,7 +209,7 @@ class _AddPlantState extends State<AddPlant> {
               _buildName(),
               _buildWateringFrequency(),
               _buildDateLastWatered(),
-              _buildHousehold(),
+              _buildHousehold(householdNotifier),
             ],
           ),
         ),
