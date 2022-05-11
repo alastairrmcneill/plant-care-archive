@@ -62,7 +62,7 @@ class PlantListTile extends StatelessWidget {
                               style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 22, fontWeight: FontWeight.w400),
                             ),
                             Text(
-                              'Location: ${plant.household}',
+                              'Location: ${plant.householdName}',
                               maxLines: 1,
                               style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12, fontStyle: FontStyle.italic),
                             ),

@@ -23,7 +23,7 @@ class _AddPlantState extends State<AddPlant> {
   late String _notes;
   late DateTime _dateLastWatered;
   DateTime? _pickedDate;
-  late String _household;
+  late int _householdIndex;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _dateTimeController = TextEditingController();
@@ -36,14 +36,15 @@ class _AddPlantState extends State<AddPlant> {
     HouseholdDatabaseService.getCurrentUserHouseholds(householdNotifier);
   }
 
-  Future<void> createPlant(PlantNotifier plantNotifier) async {
+  Future<void> createPlant(HouseholdNotifier householdNotifier, PlantNotifier plantNotifier) async {
     Plant plant = Plant(
         uid: '',
         name: _name,
         lastWateredDate: Timestamp.fromDate(_dateLastWatered),
         nextWaterDate: Timestamp.fromDate(_dateLastWatered.add(Duration(days: _wateringFrequency))),
         wateringFrequency: _wateringFrequency,
-        household: '1NMW8aD6Owv7trDlTTlC');
+        householdUID: householdNotifier.userHouseholds![_householdIndex].uid!,
+        householdName: householdNotifier.userHouseholds![_householdIndex].name);
 
     bool success = await PlantDatabaseService.createPlant(plantNotifier, plant);
 
@@ -141,24 +142,20 @@ class _AddPlantState extends State<AddPlant> {
     List<Household> households = householdNotifier.userHouseholds!;
     List<String> items = [];
     if (households.isNotEmpty) {
-      households.forEach((household) {
+      for (var household in households) {
         items.add(household.name);
-      });
+      }
     } else {
       items.add('Change to text field!!');
     }
-    String? selectedItem = items[0];
+    String selectedItem = items[0];
 
     return DropdownButtonFormField(
       value: selectedItem,
       items: items.map((String item) {
         return DropdownMenuItem(
           value: item,
-          child: Row(
-            children: <Widget>[
-              Text(item),
-            ],
-          ),
+          child: Text(item),
         );
       }).toList(),
       onChanged: (item) {
@@ -167,7 +164,7 @@ class _AddPlantState extends State<AddPlant> {
         });
       },
       onSaved: (value) {
-        _household = value as String;
+        _householdIndex = items.indexOf(value as String);
       },
     );
   }
@@ -188,7 +185,7 @@ class _AddPlantState extends State<AddPlant> {
               }
               _formKey.currentState!.save();
 
-              createPlant(plantNotifier);
+              // createPlant(householdNotifier, plantNotifier);
             },
             icon: Icon(Icons.check_rounded),
           ),

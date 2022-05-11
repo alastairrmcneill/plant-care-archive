@@ -42,7 +42,7 @@ class PlantDatabaseService {
 
   static Future<bool> createPlant(PlantNotifier plantNotifier, Plant plant) async {
     bool success = false;
-    DocumentReference ref = _db.collection('Households').doc(plant.household).collection('Plants').doc();
+    DocumentReference ref = _db.collection('Households').doc(plant.householdUID).collection('Plants').doc();
 
     Plant newPlant = plant.copy(uid: ref.id);
 
@@ -102,7 +102,7 @@ class PlantDatabaseService {
   }
 
   static updatePlant(PlantNotifier plantNotifier, Plant plant) async {
-    await _db.collection('Households').doc(plant.household).collection('Plants').doc(plant.uid).update(plant.toJSON()).whenComplete(() {
+    await _db.collection('Households').doc(plant.householdUID).collection('Plants').doc(plant.uid).update(plant.toJSON()).whenComplete(() {
       getAllNotWateringTodayPlants(plantNotifier);
       getTodaysWateringPlants(plantNotifier);
     });

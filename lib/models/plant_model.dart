@@ -9,7 +9,8 @@ class Plant {
   final Timestamp nextWaterDate;
   final int wateringFrequency;
   final String? notes;
-  final String household;
+  final String householdUID;
+  final String householdName;
   final String? lastWateredBy;
 
   Plant({
@@ -21,7 +22,8 @@ class Plant {
     required this.nextWaterDate,
     required this.wateringFrequency,
     this.notes,
-    required this.household,
+    required this.householdUID,
+    required this.householdName,
     this.lastWateredBy,
   });
 
@@ -34,7 +36,8 @@ class Plant {
           Timestamp? nextWaterDate,
           int? wateringFrequency,
           String? notes,
-          String? household,
+          String? householdUID,
+          String? householdName,
           String? lastWateredBy}) =>
       Plant(
         uid: uid ?? this.uid,
@@ -45,7 +48,8 @@ class Plant {
         wateringFrequency: wateringFrequency ?? this.wateringFrequency,
         pictureURL: pictureURL ?? this.pictureURL,
         notes: notes ?? this.notes,
-        household: household ?? this.household,
+        householdUID: householdUID ?? this.householdUID,
+        householdName: householdName ?? this.householdName,
         lastWateredBy: lastWateredBy ?? this.lastWateredBy,
       );
 
@@ -59,7 +63,8 @@ class Plant {
       'nextWaterDate': nextWaterDate,
       'wateringFrequency': wateringFrequency,
       'notes': notes,
-      'household': household,
+      'householdUID': householdUID,
+      'householdName': householdName,
       'lastWateredBy': lastWateredBy,
     };
   }
@@ -74,7 +79,8 @@ class Plant {
       wateringFrequency: json['wateringFrequency'] as int,
       pictureURL: json['pictureURL'] as String?,
       notes: json['notes'] as String?,
-      household: json['household'] as String,
+      householdUID: json['householdUID'] as String,
+      householdName: json['householdName'] as String,
       lastWateredBy: json['lastWateredBy'] as String?,
     );
   }
