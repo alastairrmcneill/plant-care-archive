@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:plant_care/models/models.dart';
 import 'package:plant_care/services/services.dart';
+import 'package:plant_care/notifiers/notifiers.dart';
 
 class AuthService {
   static FirebaseAuth _auth = FirebaseAuth.instance;
@@ -37,10 +38,15 @@ class AuthService {
   }
 
   // Sign In
-  static Future signInWithEmailPassword(String email, String password) async {
+  static Future signInWithEmailPassword(UserNotifier userNotifier, String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
+      if (user != null) {
+        AppUser appUser = await UserDatabaseService.getUser(userID: user.uid);
+        userNotifier.setCurrentUser = appUser;
+      }
+
       return _appUserFromFirebaseUser(user);
     } on FirebaseAuthException catch (error) {
       return _customErrorFromFirebaseAuthException(error);
@@ -48,18 +54,19 @@ class AuthService {
   }
 
   // Register
-  static Future registerWithEmailPassword(AppUser appUser, String email, String password) async {
+  static Future registerWithEmailPassword(UserNotifier userNotifier, AppUser appUser, String email, String password) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
 
       AppUser newAppUser = appUser.copy(uid: user!.uid);
 
-      await updateDisplayName(user, newAppUser.firstName);
+      await updateDisplayName(userNotifier, user, newAppUser.firstName);
 
       // Add user document to database
       await UserDatabaseService.createUserRecord(newAppUser);
 
+      userNotifier.setCurrentUser = _appUserFromFirebaseUser(user)!;
       return _appUserFromFirebaseUser(user);
     } on FirebaseAuthException catch (error) {
       return _customErrorFromFirebaseAuthException(error);
@@ -68,7 +75,7 @@ class AuthService {
     }
   }
 
-  static Future updateDisplayName(User user, String displayName) async {
+  static Future updateDisplayName(UserNotifier userNotifier, User user, String displayName) async {
     // Update user display name
     await user.updateDisplayName(displayName);
     await user.reload();
