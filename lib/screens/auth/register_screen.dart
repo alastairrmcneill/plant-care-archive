@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_care/models/models.dart';
+import 'package:plant_care/notifiers/notifiers.dart';
 import 'package:plant_care/services/services.dart';
 import 'package:plant_care/widgets/widgets.dart';
 import 'package:plant_care/support/wrapper.dart';
@@ -25,11 +26,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FocusNode _passwordFocus1 = FocusNode();
   final FocusNode _passwordFocus2 = FocusNode();
 
-  Future _register(String email, String password1, String password2) async {
+  Future _register(UserNotifier userNotifier, String email, String password1, String password2) async {
     AppUser appUser = AppUser(firstName: _firstNameController.text.trim(), lastName: _lastNameController.text.trim(), email: _emailController.text.trim(), households: []);
 
     if (password1 == password2) {
       dynamic result = await AuthService.registerWithEmailPassword(
+        userNotifier,
         appUser,
         email.trim(),
         password1.trim(),
@@ -53,6 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
     final registerState = Provider.of<Vaildator>(context, listen: true);
     void _resetPage() {
       registerState.reset();
@@ -170,6 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 keyboardType: TextInputType.visiblePassword,
                 submittedFunc: (string) {
                   _register(
+                    userNotifier,
                     _emailController.text,
                     _passwordController1.text,
                     _passwordController2.text,
@@ -189,6 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: registerState.registerStatus
                       ? () async {
                           await _register(
+                            userNotifier,
                             _emailController.text,
                             _passwordController1.text,
                             _passwordController2.text,

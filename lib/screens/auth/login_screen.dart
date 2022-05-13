@@ -5,6 +5,7 @@ import 'package:plant_care/screens/screens.dart';
 import 'package:plant_care/widgets/widgets.dart';
 import 'package:plant_care/support/wrapper.dart';
 import 'package:provider/provider.dart';
+import 'package:plant_care/notifiers/notifiers.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,8 +21,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
 
-  Future login(String email, String password) async {
+  Future login(UserNotifier userNotifier, String email, String password) async {
     dynamic result = await AuthService.signInWithEmailPassword(
+      userNotifier,
       email.trim(),
       password.trim(),
     );
@@ -46,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
     final loginState = Provider.of<Vaildator>(context, listen: true);
 
     void _resetPage() {
@@ -124,6 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 keyboardType: TextInputType.visiblePassword,
                 submittedFunc: (string) {
                   login(
+                    userNotifier,
                     _emailController.text,
                     _passwordController.text,
                   ).then((value) {
@@ -143,6 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: loginState.loginStatus
                       ? () async {
                           await login(
+                            userNotifier,
                             _emailController.text,
                             _passwordController.text,
                           ).then((value) {

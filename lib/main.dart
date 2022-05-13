@@ -28,6 +28,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Vaildator>(
           create: (_) => Vaildator(),
         ),
+        ChangeNotifierProvider<UserNotifier>(
+          create: (_) => UserNotifier(),
+        ),
         ChangeNotifierProvider<PlantNotifier>(
           create: (_) => PlantNotifier(),
         ),

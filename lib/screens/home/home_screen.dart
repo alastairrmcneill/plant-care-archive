@@ -27,24 +27,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context);
     return Scaffold(
       backgroundColor: const Color(0xFF1C3F37),
       appBar: AppBar(
         centerTitle: false,
-        title: Text('Hello ${AuthService.getCurrentUsername()}'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await AuthService.signOut();
-            },
-            icon: Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.rotationY(pi),
-              child: const Icon(Icons.sort),
-            ),
-            iconSize: 24,
-          ),
-        ],
+        title: Text('Hello ${userNotifier.currentUser?.firstName}'),
       ),
       floatingActionButton: SpeedDial(
         icon: Icons.add,
@@ -61,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ),
         ],
       ),
+      endDrawer: const CustomRightDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
