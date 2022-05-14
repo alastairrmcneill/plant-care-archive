@@ -64,6 +64,8 @@ class PlantDatabaseService {
       getAllNotWateringTodayPlants(plantNotifier);
       getTodaysWateringPlants(plantNotifier);
     }).whenComplete(() {
+      final DocumentReference docRef = _db.collection("Households").doc(plant.householdUID);
+      docRef.update({"plantCount": FieldValue.increment(1)});
       success = true;
     }).onError((error, stackTrace) {
       success = false;
@@ -171,6 +173,24 @@ class HouseholdDatabaseService {
 
     householdNotifier.setUserHouseholds = _householdList;
   }
+
+  static getCurrentHouseholdPlants(HouseholdNotifier householdNotifier) async {
+    CollectionReference ref = _db.collection('Households').doc(householdNotifier.currentHousehold!.uid).collection('Plants');
+
+    QuerySnapshot querySnapshot = await ref.get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    List<Plant> _plantList = [];
+    allData.forEach((data) {
+      Plant plant = Plant.fromJSON(data);
+      _plantList.add(plant);
+    });
+
+    householdNotifier.setHouseholdPlants = _plantList;
+  }
+
+  static getCurrentHouseholdMembers(HouseholdNotifier householdNotifier) async {}
+
   // Update
 
   static updateHousehold(HouseholdNotifier householdNotifier, Household household) async {

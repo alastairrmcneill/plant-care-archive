@@ -185,7 +185,7 @@ class _AddPlantState extends State<AddPlant> {
               }
               _formKey.currentState!.save();
 
-              // createPlant(householdNotifier, plantNotifier);
+              createPlant(householdNotifier, plantNotifier);
             },
             icon: Icon(Icons.check_rounded),
           ),

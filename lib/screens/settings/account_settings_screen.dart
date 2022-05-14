@@ -14,6 +14,7 @@ class _AccountSettingsState extends State<AccountSettings> {
       appBar: AppBar(
         title: Text('Account Settings'),
       ),
+      body: Center(child: Text('In progress')),
     );
   }
 }

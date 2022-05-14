@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plant_care/notifiers/notifiers.dart';
 import 'package:plant_care/services/database_service.dart';
-import 'package:plant_care/widgets/household_list_view_tile.dart';
+import 'package:plant_care/widgets/household_list_tile.dart';
 import 'package:provider/provider.dart';
 
 class HouseholdListView extends StatefulWidget {

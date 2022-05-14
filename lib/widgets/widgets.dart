@@ -8,3 +8,5 @@ export 'water_today_list_view.dart';
 export 'dialog_box_widget.dart';
 export 'custom_right_drawer.dart';
 export 'account_summary.dart';
+export 'household_members.dart';
+export 'household_plants.dart';

@@ -36,6 +36,7 @@ Future<String> addHousehold(UserNotifier userNotifier, HouseholdNotifier househo
 
   // Update household
   household.members.add(userID);
+  household.memberCount++;
   await HouseholdDatabaseService.updateHousehold(householdNotifier, household);
 
   return household.name;

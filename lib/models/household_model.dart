@@ -4,6 +4,8 @@ class Household {
   final String? uid;
   final String name;
   final String code;
+  late int memberCount;
+  final int plantCount;
   final List<String> members;
 
   Household({
@@ -11,6 +13,8 @@ class Household {
     required this.name,
     required this.code,
     required this.members,
+    this.memberCount = 1,
+    this.plantCount = 0,
   });
 
   // From JSON
@@ -22,6 +26,8 @@ class Household {
       uid: json['uid'] as String,
       name: json['name'] as String,
       code: json['code'] as String,
+      memberCount: json['memberCount'] as int,
+      plantCount: json['plantCount'] as int,
       members: newMembers,
     );
   }
@@ -33,6 +39,8 @@ class Household {
       'name': name,
       'code': code,
       'members': members,
+      'plantCount': plantCount,
+      'memberCount': memberCount,
     };
   }
 
@@ -40,12 +48,16 @@ class Household {
     String? uid,
     String? name,
     String? code,
+    int? memberCount,
+    int? plantCount,
     List<String>? members,
   }) =>
       Household(
         uid: uid ?? this.uid,
         name: name ?? this.name,
         code: code ?? this.code,
+        memberCount: memberCount ?? this.memberCount,
+        plantCount: plantCount ?? this.plantCount,
         members: members ?? this.members,
       );
 }
