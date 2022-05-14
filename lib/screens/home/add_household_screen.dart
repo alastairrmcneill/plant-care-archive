@@ -19,6 +19,8 @@ class _AddHouseholdState extends State<AddHousehold> {
   @override
   Widget build(BuildContext context) {
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context);
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Household'),
@@ -40,7 +42,7 @@ class _AddHouseholdState extends State<AddHousehold> {
               width: 100,
               child: ElevatedButton(
                 onPressed: () async {
-                  String code = await createHousehold(householdNotifier, _nameController.text.trim());
+                  String code = await createHousehold(userNotifier, householdNotifier, _nameController.text.trim());
                   showHouseholdAddedDialog(
                     context: context,
                     title: 'Household created successfully',
@@ -67,7 +69,7 @@ class _AddHouseholdState extends State<AddHousehold> {
               child: ElevatedButton(
                 onPressed: () async {
                   String code = _codeController.text.trim();
-                  String name = await addHousehold(code);
+                  String name = await addHousehold(userNotifier, householdNotifier, code);
                   showHouseholdAddedDialog(
                     context: context,
                     title: 'House added successfully',

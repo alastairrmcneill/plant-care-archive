@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:plant_care/models/models.dart';
 import 'package:plant_care/notifiers/notifiers.dart';
 import 'package:plant_care/services/services.dart';
+import 'package:provider/provider.dart';
 
 class UserDatabaseService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -28,10 +29,23 @@ class UserDatabaseService {
     return user;
   }
 
-  static updateUser(AppUser user) async {
+  static getCurrentUser(UserNotifier userNotifier) async {
+    DocumentReference ref = _db.collection('Users').doc(AuthService.getCurrentUser());
+
+    DocumentSnapshot snapshot = await ref.get();
+    Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+
+    AppUser user = AppUser.fromJSON(data);
+
+    userNotifier.setCurrentUser = user;
+  }
+
+  static updateUser(UserNotifier userNotifier, AppUser user) async {
     DocumentReference ref = _db.collection('Users').doc(user.uid);
 
-    ref.set(user.toJSON());
+    await ref.set(user.toJSON()).whenComplete(() {
+      userNotifier.setCurrentUser = user;
+    });
   }
 }
 
@@ -113,7 +127,7 @@ class HouseholdDatabaseService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // Create
-  static Future<String> createHousehold(HouseholdNotifier householdNotifier, Household household) async {
+  static Future<String> createHousehold(UserNotifier userNotifier, HouseholdNotifier householdNotifier, Household household) async {
     String returnString = '';
     DocumentReference ref = _db.collection('Households').doc();
 
@@ -159,9 +173,11 @@ class HouseholdDatabaseService {
   }
   // Update
 
-  static updateHousehold(Household household) async {
+  static updateHousehold(HouseholdNotifier householdNotifier, Household household) async {
     DocumentReference ref = _db.collection('Households').doc(household.uid);
 
-    ref.set(household.toJSON());
+    ref.set(household.toJSON()).whenComplete(() {
+      getCurrentUserHouseholds(householdNotifier);
+    });
   }
 }

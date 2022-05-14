@@ -5,3 +5,5 @@ export 'auth/forgot_passowrd_screen.dart';
 export 'home/home_screen.dart';
 export 'home/plant_detail.dart';
 export 'home/add_plant_screen.dart';
+export 'settings/notification_settings_screen.dart';
+export 'settings/account_settings_screen.dart';
