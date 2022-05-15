@@ -2,6 +2,9 @@
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 
+# Google Play Store files
+Android/key.properties
+
 # Miscellaneous
 *.class
 *.log
