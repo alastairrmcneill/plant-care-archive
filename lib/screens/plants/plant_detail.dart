@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/notifiers/notifiers.dart';
+import 'package:plant_care/screens/plants/edit_plant.dart';
 import 'package:plant_care/services/plant_service.dart';
 import 'package:provider/provider.dart';
 
@@ -52,9 +53,7 @@ class _PlantDetailState extends State<PlantDetail> {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {
-              print('Edit');
-            },
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const EditPlant())),
             icon: const Icon(Icons.edit_outlined),
           )
         ],

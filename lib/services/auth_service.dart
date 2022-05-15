@@ -61,8 +61,6 @@ class AuthService {
 
       AppUser newAppUser = appUser.copy(uid: user!.uid);
 
-      await updateDisplayName(userNotifier, user, newAppUser.firstName);
-
       // Add user document to database
       await UserDatabaseService.createUserRecord(newAppUser);
 
@@ -73,12 +71,6 @@ class AuthService {
     } on FirebaseException catch (error) {
       return _customErrorFromFirebaseException(error);
     }
-  }
-
-  static Future updateDisplayName(UserNotifier userNotifier, User user, String displayName) async {
-    // Update user display name
-    await user.updateDisplayName(displayName);
-    await user.reload();
   }
 
   // Forgot password

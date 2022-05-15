@@ -171,14 +171,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 isPassword: true,
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.visiblePassword,
-                submittedFunc: (string) {
-                  _register(
+                submittedFunc: (string) async {
+                  await _register(
                     userNotifier,
                     _emailController.text,
                     _passwordController1.text,
                     _passwordController2.text,
-                  ).then((value) {
-                    if (value is AppUser) {
+                  ).whenComplete(() {
+                    if (userNotifier.currentUser != null) {
                       _resetPage();
                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
                     }
@@ -197,8 +197,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             _emailController.text,
                             _passwordController1.text,
                             _passwordController2.text,
-                          ).then((value) {
-                            if (value is AppUser) {
+                          ).whenComplete(() {
+                            if (userNotifier.currentUser != null) {
                               _resetPage();
                               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
                             }

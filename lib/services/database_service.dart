@@ -33,11 +33,14 @@ class UserDatabaseService {
     DocumentReference ref = _db.collection('Users').doc(AuthService.getCurrentUser());
 
     DocumentSnapshot snapshot = await ref.get();
-    Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
 
-    AppUser user = AppUser.fromJSON(data);
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
 
-    userNotifier.setCurrentUser = user;
+      AppUser user = AppUser.fromJSON(data);
+
+      userNotifier.setCurrentUser = user;
+    }
   }
 
   static updateUser(UserNotifier userNotifier, AppUser user) async {
@@ -79,20 +82,22 @@ class PlantDatabaseService {
     // Find all households
     DocumentSnapshot<Map<String, dynamic>> docSnapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).get();
 
-    Map<String, dynamic> data = docSnapshot.data()!;
-    List<dynamic> householdsRaw = data['households'];
-    List<String> households = List<String>.from(householdsRaw);
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data()!;
+      List<dynamic> householdsRaw = data['households'];
+      List<String> households = List<String>.from(householdsRaw);
 
-    // Loop thruogh households
-    for (var household in households) {
-      QuerySnapshot snapshot = await _db.collection('Households').doc(household).collection('Plants').where('nextWaterDate', isGreaterThan: Timestamp.now()).get();
-      snapshot.docs.forEach((doc) {
-        Plant plant = Plant.fromJSON(doc.data());
-        _plantList.add(plant);
-      });
+      // Loop thruogh households
+      for (var household in households) {
+        QuerySnapshot snapshot = await _db.collection('Households').doc(household).collection('Plants').where('nextWaterDate', isGreaterThan: Timestamp.now()).get();
+        snapshot.docs.forEach((doc) {
+          Plant plant = Plant.fromJSON(doc.data());
+          _plantList.add(plant);
+        });
+      }
+
+      plantNotifier.setNotWateringPlantList = _plantList;
     }
-
-    plantNotifier.setNotWateringPlantList = _plantList;
   }
 
   static getTodaysWateringPlants(PlantNotifier plantNotifier) async {
@@ -101,26 +106,37 @@ class PlantDatabaseService {
     // Find all households
     DocumentSnapshot<Map<String, dynamic>> docSnapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).get();
 
-    Map<String, dynamic> data = docSnapshot.data()!;
-    List<dynamic> householdsRaw = data['households'];
-    List<String> households = List<String>.from(householdsRaw);
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data()!;
+      List<dynamic> householdsRaw = data['households'];
+      List<String> households = List<String>.from(householdsRaw);
 
-    // Loop thruogh households
-    for (var household in households) {
-      QuerySnapshot snapshot = await _db.collection('Households').doc(household).collection('Plants').where('nextWaterDate', isLessThan: Timestamp.now()).get();
-      snapshot.docs.forEach((doc) {
-        Plant plant = Plant.fromJSON(doc.data());
-        _plantList.add(plant);
-      });
+      // Loop thruogh households
+      for (var household in households) {
+        QuerySnapshot snapshot = await _db.collection('Households').doc(household).collection('Plants').where('nextWaterDate', isLessThan: Timestamp.now()).get();
+        snapshot.docs.forEach((doc) {
+          Plant plant = Plant.fromJSON(doc.data());
+          _plantList.add(plant);
+        });
+      }
+
+      plantNotifier.setWaterPlantList = _plantList;
     }
-
-    plantNotifier.setWaterPlantList = _plantList;
   }
 
   static updatePlant(PlantNotifier plantNotifier, Plant plant) async {
     await _db.collection('Households').doc(plant.householdUID).collection('Plants').doc(plant.uid).update(plant.toJSON()).whenComplete(() {
       getAllNotWateringTodayPlants(plantNotifier);
       getTodaysWateringPlants(plantNotifier);
+    });
+  }
+
+  static deletePlant(PlantNotifier plantNotifier, Plant plant) async {
+    DocumentReference ref = _db.collection('Households').doc(plant.householdUID).collection('Plants').doc(plant.uid);
+
+    ref.delete().whenComplete(() {
+      getAllNotWateringTodayPlants(plantNotifier);
+      getAllNotWateringTodayPlants(plantNotifier);
     });
   }
 }
@@ -157,21 +173,23 @@ class HouseholdDatabaseService {
     // Find all households
     DocumentSnapshot<Map<String, dynamic>> docSnapshot = await _db.collection('Users').doc(AuthService.getCurrentUser()).get();
 
-    Map<String, dynamic> data = docSnapshot.data()!;
-    List<dynamic> householdsRaw = data['households'];
-    List<String> householdIDs = List<String>.from(householdsRaw);
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data()!;
+      List<dynamic> householdsRaw = data['households'];
+      List<String> householdIDs = List<String>.from(householdsRaw);
 
-    // Get households
-    List<Household> _householdList = [];
+      // Get households
+      List<Household> _householdList = [];
 
-    for (var householdID in householdIDs) {
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await _db.collection('Households').doc(householdID).get();
-      Map<String, dynamic>? json = snapshot.data();
+      for (var householdID in householdIDs) {
+        DocumentSnapshot<Map<String, dynamic>> snapshot = await _db.collection('Households').doc(householdID).get();
+        Map<String, dynamic>? json = snapshot.data();
 
-      _householdList.add(Household.fromJSON(json));
+        _householdList.add(Household.fromJSON(json));
+      }
+
+      householdNotifier.setUserHouseholds = _householdList;
     }
-
-    householdNotifier.setUserHouseholds = _householdList;
   }
 
   static getCurrentHouseholdPlants(HouseholdNotifier householdNotifier) async {
@@ -189,7 +207,26 @@ class HouseholdDatabaseService {
     householdNotifier.setHouseholdPlants = _plantList;
   }
 
-  static getCurrentHouseholdMembers(HouseholdNotifier householdNotifier) async {}
+  static getCurrentHouseholdMembers(HouseholdNotifier householdNotifier) async {
+    // Find all users
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot = await _db.collection('Households').doc(householdNotifier.currentHousehold!.uid).get();
+
+    Map<String, dynamic> data = docSnapshot.data()!;
+    List<dynamic> membersRaw = data['members'];
+    List<String> memberUIDs = List<String>.from(membersRaw);
+
+    // Get households
+    List<AppUser> _memberList = [];
+
+    for (var memberUID in memberUIDs) {
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await _db.collection('Users').doc(memberUID).get();
+      Map<String, dynamic>? json = snapshot.data();
+
+      _memberList.add(AppUser.fromJSON(json));
+    }
+
+    householdNotifier.setHouseholdMembers = _memberList;
+  }
 
   // Update
 

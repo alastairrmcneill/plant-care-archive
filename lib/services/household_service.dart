@@ -42,6 +42,36 @@ Future<String> addHousehold(UserNotifier userNotifier, HouseholdNotifier househo
   return household.name;
 }
 
+updateHousehold(UserNotifier userNotifier, HouseholdNotifier householdNotifier, String name) async {
+  Household newHousehold = householdNotifier.currentHousehold!.copy(name: name);
+  HouseholdDatabaseService.updateHousehold(householdNotifier, newHousehold);
+  householdNotifier.setCurrentHousehold = newHousehold;
+}
+
+leaveHousehold(UserNotifier userNotifier, HouseholdNotifier householdNotifier, PlantNotifier plantNotifier) async {
+  AppUser appUser = userNotifier.currentUser!;
+  Household household = householdNotifier.currentHousehold!;
+
+// Remove member from household
+  household.members.remove(appUser.uid);
+
+// Update member count
+  household.memberCount -= 1;
+
+  // Update household
+  HouseholdDatabaseService.updateHousehold(householdNotifier, household);
+
+// remove household from AppUser
+  appUser.households.remove(household.uid);
+
+  UserDatabaseService.updateUser(userNotifier, appUser);
+
+  HouseholdDatabaseService.getCurrentUserHouseholds(householdNotifier);
+
+  PlantDatabaseService.getAllNotWateringTodayPlants(plantNotifier);
+  PlantDatabaseService.getTodaysWateringPlants(plantNotifier);
+}
+
 String randomString(int length) {
   const ch = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
   Random r = Random();

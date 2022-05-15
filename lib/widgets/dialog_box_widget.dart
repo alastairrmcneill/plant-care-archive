@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_care/screens/home/add_plant_screen.dart';
+import 'package:plant_care/screens/plants/add_plant_screen.dart';
 
 // 1 button Dialog
 showAlertDialog(BuildContext context) {
