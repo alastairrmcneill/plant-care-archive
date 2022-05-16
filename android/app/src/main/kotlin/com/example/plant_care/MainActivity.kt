@@ -1,4 +1,4 @@
-package com.example.plant_care
+package com.alastairmcneill.plantcare
 
 import io.flutter.embedding.android.FlutterActivity
 
