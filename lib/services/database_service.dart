@@ -135,14 +135,9 @@ class PlantDatabaseService {
     DocumentReference ref = _db.collection('Households').doc(plant.householdUID).collection('Plants').doc(plant.uid);
 
     ref.delete().whenComplete(() {
-      ;
       getAllNotWateringTodayPlants(plantNotifier);
       getAllNotWateringTodayPlants(plantNotifier);
     });
-
-    ref = _db.collection('Households').doc(plant.householdUID);
-
-    ref.update({"plantCount": FieldValue.increment(-1)});
   }
 }
 
