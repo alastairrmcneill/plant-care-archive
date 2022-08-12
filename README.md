@@ -1,16 +1,7 @@
-# plant_care
+# Plant Care
 
-A new Flutter project.
+I'm not good at remembering to water my plants. As such I wanted to make an app that notified me every time one of my plants needed watered. In this case you can input your plants and when you last watered it and it will let you know when you next need to water it. If you share your household with another, get them to download the app and add the household code, now you won't both water the plant on the same day.
 
-## Getting Started
+## Technology 
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project is written in Dart using the Flutter framework. The databased used in the backend is Firebase for both storage and user authentication.
